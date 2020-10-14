@@ -1,0 +1,6 @@
+Blueberry Cheesecake
+8.0
+A creamy cheesecake filled with a luscious, warm sauce.
+Dessert
+true
+7

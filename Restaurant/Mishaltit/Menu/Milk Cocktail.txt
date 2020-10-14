@@ -1,0 +1,6 @@
+Milk Cocktail
+3.0
+milk, banana, honey, and ice.16oz
+Juice
+true
+17

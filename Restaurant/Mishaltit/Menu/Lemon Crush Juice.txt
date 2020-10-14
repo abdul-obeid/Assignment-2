@@ -1,0 +1,6 @@
+Lemon Crush Juice
+3.0
+orange, lemon, sugar, and ice
+Juice
+true
+16

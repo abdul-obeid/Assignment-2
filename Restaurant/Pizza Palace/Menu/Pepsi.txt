@@ -1,0 +1,6 @@
+Pepsi
+2.0
+soft drink
+Drink
+true
+10

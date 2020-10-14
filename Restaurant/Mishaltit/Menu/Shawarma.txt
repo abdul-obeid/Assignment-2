@@ -1,0 +1,6 @@
+Shawarma
+12.0
+beef and lamb marinated with our special spices
+Main Entrees
+true
+19

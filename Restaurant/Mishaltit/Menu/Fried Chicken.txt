@@ -1,0 +1,6 @@
+Fried Chicken
+11.0
+Chicken deep fried with cheese and chili sauce
+Main Entrees
+true
+20

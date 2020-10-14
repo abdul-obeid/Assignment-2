@@ -1,0 +1,6 @@
+Lebanese Salad
+8.0
+lettuce, tomatoes, parsley, radishs, and cucumber
+Salad
+true
+24

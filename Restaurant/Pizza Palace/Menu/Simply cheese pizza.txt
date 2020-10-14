@@ -1,0 +1,6 @@
+Simply cheese pizza
+24.0
+100% mozzarella cheese, Parmesan cheese & Oregano on our Signature Sauce.
+pastry
+true
+5

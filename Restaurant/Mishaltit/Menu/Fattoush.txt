@@ -1,0 +1,6 @@
+Fattoush
+9.0
+lebanese salad with fried pita bread
+Salad
+true
+25

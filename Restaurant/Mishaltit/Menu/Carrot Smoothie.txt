@@ -1,0 +1,6 @@
+Carrot Smoothie
+3.0
+carrot, banana, honey, and ice.
+Juice
+true
+18
