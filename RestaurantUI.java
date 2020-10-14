@@ -290,12 +290,22 @@ public class RestaurantUI{
 					System.out.print("|\t>>");
 					int newStatus = scan.nextInt();
 					if(newStatus == 1){
-						restaurant.getPastOrders().get(choosenOrder).setOrderStatus("Ready");
-						// customer.getCurrentOrder().setOrderStatus("Ready");
+						try{
+							restaurant.getPastOrders().get(choosenOrder).replaceOrderStatus(restaurant.getPastOrders().get(choosenOrder), "Ready");
+							// customer.getCurrentOrder().setOrderStatus("Ready");
+						}
+						catch(IOException ex){
+							System.out.println(ex.getMessage());
+						}
 					}
 					else if(newStatus == 2){
-						restaurant.getPastOrders().get(choosenOrder).setOrderStatus("Collected");
-						// customer.getCurrentOrder().setOrderStatus("Collected");
+						try{
+							restaurant.getPastOrders().get(choosenOrder).replaceOrderStatus(restaurant.getPastOrders().get(choosenOrder), "Collected");
+							// customer.getCurrentOrder().setOrderStatus("Ready");
+						}
+						catch(IOException ex){
+							System.out.println(ex.getMessage());
+						}
 					}
 					else
 						throw new InputMismatchException();

@@ -199,7 +199,7 @@ public class Order {
         this.orderPrice = Double.parseDouble(orderInfo.nextLine());
 
         while (orderInfo.hasNext()) {       // Creates items from file
-            this.orderContents.add(new Item(orderInfo.nextLine(),Double.parseDouble(orderInfo.nextLine()),orderInfo.nextLine(),orderInfo.nextLine())); 
+            this.orderContents.add(new Item(orderInfo.nextLine(),Double.parseDouble(orderInfo.nextLine()),orderInfo.nextLine(),orderInfo.nextLine(), Integer.parseInt(orderInfo.nextLine()))); //14/10 change log
         }
         orderInfo.close();
     }

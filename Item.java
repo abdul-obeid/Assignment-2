@@ -20,50 +20,34 @@ public class Item implements Comparable<Item>{
 		}
 	}
 	
-	public Item(String itemName, 
-				double itemPrice, 
-				String itemDescription, 
-				String itemType,
-				boolean availability
-				){
-		// try{
-			// FileWriter LastIDFile = new FileWriter("LastID.txt"); 
-			// PrintWriter outputNames =  new PrintWriter(LastIDFile);			
-			this.itemName = itemName;
-			this.itemPrice = itemPrice;
-			this.itemDescription = itemDescription;
-			this.itemType = itemType;
-			this.availability = availability;
-			itemID = ++lastID;
-			// outputNames.println(lastID);
-			// outputNames.close();
-			sendLastID(lastID);
-		// }
-		// catch(IOException ex){
-			// System.out.println(ex.getMessage());
-		// }
-	}
+	// public Item(String itemName, 
+				// double itemPrice, 
+				// String itemDescription, 
+				// String itemType,
+				// boolean availability
+				// ){		
+			// this.itemName = itemName;
+			// this.itemPrice = itemPrice;
+			// this.itemDescription = itemDescription;
+			// this.itemType = itemType;
+			// this.availability = availability;
+			// itemID = ++lastID;
+			// sendLastID(lastID);
+	// }
 	
 	public Item(String itemName, //
 				double itemPrice, 
 				String itemDescription, 
 				String itemType){
-		// try{
-			// FileWriter LastIDFile = new FileWriter("LastID.txt"); // makes a file to save the items names to read them later, the true value is to be able to write more without clearing the file every time
-			// PrintWriter outputNames =  new PrintWriter(LastIDFile);			
 			this.itemName = itemName;
 			this.itemPrice = itemPrice;
 			this.itemDescription = itemDescription;
 			this.itemType = itemType;
 			itemID = ++lastID;
 			sendLastID(lastID);
-			// outputNames.println(lastID);
-			// outputNames.close();
-		// }
-		// catch(IOException ex){
-			// System.out.println(ex.getMessage());
-		// }
 	}
+	
+	
 	public Item(String itemName, 
 				double itemPrice, 
 				String itemDescription, 
@@ -77,6 +61,21 @@ public class Item implements Comparable<Item>{
 		this.itemDescription = itemDescription;
 		this.itemType = itemType;
 		this.availability = availability;
+		this.itemID = itemID;
+	}
+	
+	
+	public Item(String itemName, // 14/10 change log
+				double itemPrice, 
+				String itemDescription, 
+				String itemType,
+				int itemID
+				){
+					
+		this.itemName = itemName;
+		this.itemPrice = itemPrice;
+		this.itemDescription = itemDescription;
+		this.itemType = itemType;
 		this.itemID = itemID;
 	}
 	
@@ -153,7 +152,7 @@ public class Item implements Comparable<Item>{
 	}
 	
 	public String writeToOrder(){
-		return (itemName + "\n" + itemPrice + "\n" + itemDescription + "\n" + itemType );
+		return (itemName + "\n" + itemPrice + "\n" + itemDescription + "\n" + itemType + "\n" + itemID ); // 14/10 change log
 	}
 	
 	@Override

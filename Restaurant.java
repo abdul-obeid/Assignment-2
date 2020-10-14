@@ -8,9 +8,9 @@ public class Restaurant extends User{
 	private ArrayList<Order> currentOrders = new ArrayList<>(); // Restaurant's active orders (not collected yet)
 	private ArrayList<Order> pastOrders = new ArrayList<>(); // Restaurant's past orders (collected )
 	private String address; // Restaurant address
-	File restDir; // Restaurant Directory (declare it here to use it in different methods)
+	private File restDir; // Restaurant Directory (declare it here to use it in different methods), NOTE TO PROGRAMMER -> IF SOMETHING WENT WRONG, CHANGE BACK TO DEFAULT
+	
 	// public Restaurant(){ //default constructor 
-		// super(username, password);
 	// }
 	
 	public Restaurant(String name,String username, String password, String description, String address) {
