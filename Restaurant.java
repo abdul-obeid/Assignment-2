@@ -9,7 +9,7 @@ public class Restaurant extends User{
 	private ArrayList<Order> pastOrders = new ArrayList<>(); // Restaurant's past orders (collected )
 	private String address; // Restaurant address
 	private File restDir; // Restaurant Directory (declare it here to use it in different methods), NOTE TO PROGRAMMER -> IF SOMETHING WENT WRONG, CHANGE BACK TO DEFAULT
-	
+	private int orderCount;
 	// public Restaurant(){ //default constructor 
 	// }
 	
@@ -115,6 +115,12 @@ public class Restaurant extends User{
 			return true;
 		else
 			return false;
+	}
+	public int getOrderCount(){
+		return orderCount;
+	}
+	public void setOrderCount(int orderCount){
+		this.orderCount = orderCount;
 	}
 
 	
