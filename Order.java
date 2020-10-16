@@ -14,6 +14,9 @@ public class Order {
     private Date timeRequested = new Date();    //Sets timeRequested to the current time by default
     private Date timeReady;                     //Time when the restaurant finished preparing order
     private Date timeCollected;                 //Time when customer collected order
+    private String orderType;
+    private String delAddress;
+    private Rider assignedRider;
 
     static File cusDir = new File("Customer\\"); // + cusUsername
     static File resDir = new File("Restaurant\\" ); //+ resName
@@ -87,7 +90,7 @@ public class Order {
         Order.replaceLines(resOrder, newStatus, 4);
     }
 
-    public void createCusFiles(int orderID, String cusUsername, String resName, ArrayList<Item> orderContents, String orderStatus, double orderPrice) throws IOException{
+    public void createCusFiles(int orderID, String cusUsername, String resName, ArrayList<Item> orderContents, String orderStatus, double orderPrice, String orderType, String delAddress) throws IOException{
 
         new File(cusDir + "\\" + cusUsername + "\\Order\\").mkdirs();                                              // code for making order file in restaurant directory
         File cusOrderNames = new File(cusDir + "\\" + cusUsername + "\\Order\\"+"names.txt"); //Adds order filename to names.txt file. Used to fetch order file names later.
@@ -104,6 +107,9 @@ public class Order {
         outputCusOrder.println(resName);
         outputCusOrder.println(orderStatus);
         outputCusOrder.println(orderPrice);
+        outputCusOrder.println(orderType);
+        outputCusOrder.println(delAddress);
+
         for (int i = 0; i< orderContents.size(); i++) {
             outputCusOrder.println(orderContents.get(i).writeToOrder()); //Writes item information to file
         }
@@ -112,7 +118,7 @@ public class Order {
     }
 
 
-    public void createResFiles(int orderID, String cusUsername, String resName, ArrayList<Item> orderContents, String orderStatus, double orderPrice) throws IOException{
+    public void createResFiles(int orderID, String cusUsername, String resName, ArrayList<Item> orderContents, String orderStatus, double orderPrice, String orderType, String delAddress) throws IOException{
         
         new File(resDir + "\\" + resName + "\\Order\\").mkdirs();                                              // code for making order file in restaurant directory
         File orderNames = new File(resDir + "\\" + resName + "\\Order\\"+"names.txt"); //Adds order filename to names.txt file. Used to fetch order file names later.
@@ -128,6 +134,9 @@ public class Order {
         outputResOrder.println(resName);
         outputResOrder.println(orderStatus);
         outputResOrder.println(orderPrice);
+        outputResOrder.println(orderType);
+        outputResOrder.println(delAddress);
+
         for (int i = 0; i< orderContents.size(); i++) {
             outputResOrder.println(orderContents.get(i).writeToOrder()); //Writes item information to file
         }
@@ -136,17 +145,17 @@ public class Order {
 
 
 
-    public void createOrderFiles(int orderID, String cusUsername, String resName, ArrayList<Item> orderContents, String orderStatus, double orderPrice) throws IOException{
+    public void createOrderFiles(int orderID, String cusUsername, String resName, ArrayList<Item> orderContents, String orderStatus, double orderPrice, String orderType, String delAddress) throws IOException{
         
-        createCusFiles(orderID, cusUsername, resName, orderContents,orderStatus, orderPrice);
-        createResFiles(orderID, cusUsername, resName, orderContents, orderStatus, orderPrice);
+        createCusFiles(orderID, cusUsername, resName, orderContents,orderStatus, orderPrice, orderType, delAddress);
+        createResFiles(orderID, cusUsername, resName, orderContents, orderStatus, orderPrice, orderType, delAddress);
 	}
 
     //CONSTRUCTORS
 
     public Order() {}   //Default constructor        
         
-    public Order(String newCusUsername, String newResName, ArrayList<Item> newContents) throws IOException{  //Constructor for new orders
+    public Order(String newCusUsername, String newResName, ArrayList<Item> newContents, String newOrderType, String newDelAddress) throws IOException{  //Constructor for new orders
         File f = new File(cusDir + "\\lastID.txt");
         if(!(f.exists()))
             f.createNewFile();
@@ -156,13 +165,15 @@ public class Order {
         saveLastID();
         this.cusUsername = newCusUsername;
         this.resName = newResName;
+        this.orderType = newOrderType;
+        this.delAddress = newDelAddress;
         for (Item i:newContents){    //Copies newContents into orderContents
             this.orderContents.add(i);
             this.orderPrice += i.getItemPrice();
         }
         this.orderStatus = "Preparing";
         this.timeRequested = new Date(); //Sets timeRequested to the current time
-        createOrderFiles(this.orderID, this.cusUsername, this.resName, this.orderContents, this.orderStatus, this.orderPrice);
+        createOrderFiles(this.orderID, this.cusUsername, this.resName, this.orderContents, this.orderStatus, this.orderPrice, this.orderType, this.delAddress);
     }
     public Order(String filePath) throws IOException {      //Constructor for orders from filepath
         File f = new File(cusDir + "\\lastID.txt");
@@ -177,9 +188,11 @@ public class Order {
         this.resName = orderInfo.nextLine();
         this.orderStatus = orderInfo.nextLine();
         this.orderPrice = Double.parseDouble(orderInfo.nextLine());
+        this.orderType = orderInfo.nextLine();
+        this.delAddress = orderInfo.nextLine();
 
         while (orderInfo.hasNext()) {       // Creates items from file
-            this.orderContents.add(new Item(orderInfo.nextLine(),Double.parseDouble(orderInfo.nextLine()),orderInfo.nextLine(),orderInfo.nextLine())); 
+            this.orderContents.add(new Item(orderInfo.nextLine(),Double.parseDouble(orderInfo.nextLine()),orderInfo.nextLine(),orderInfo.nextLine(),Integer.parseInt(orderInfo.nextLine()))); 
         }
         orderInfo.close();
     }
@@ -197,9 +210,11 @@ public class Order {
         this.resName = orderInfo.nextLine();
         this.orderStatus = orderInfo.nextLine();
         this.orderPrice = Double.parseDouble(orderInfo.nextLine());
+        this.orderType = orderInfo.nextLine();
+        this.delAddress = orderInfo.nextLine();
 
         while (orderInfo.hasNext()) {       // Creates items from file
-            this.orderContents.add(new Item(orderInfo.nextLine(),Double.parseDouble(orderInfo.nextLine()),orderInfo.nextLine(),orderInfo.nextLine(), Integer.parseInt(orderInfo.nextLine()))); //14/10 change log
+            this.orderContents.add(new Item(orderInfo.nextLine(),Double.parseDouble(orderInfo.nextLine()),orderInfo.nextLine(),orderInfo.nextLine(),Integer.parseInt(orderInfo.nextLine()))); 
         }
         orderInfo.close();
     }
@@ -252,6 +267,25 @@ public class Order {
     public static void setLastID(int newID) {
         lastID = newID;
     }
+    public String getOrderType() {
+        return orderType;
+    }
+    public void setOrderType(String newType) {
+        this.orderType = newType;
+    }
+    public String getDelAddress() {
+        return delAddress;
+    }
+    public void setDelAddress(String newAddress) {
+        this.delAddress = newAddress;
+    }
+    public Rider getAssignedRider() {
+        return assignedRider;
+    }
+    public void setAssignedRider(Rider newRider) {
+        this.assignedRider = newRider;
+    }
+    
     
     // TOSTRING METHOD
 

@@ -37,6 +37,8 @@ public class HomeCustomer {
                 }
                 catch(Exception e) {
                     System.out.println("Error: Please try again.");
+                    System.out.println(e);
+                    Thread.sleep(2000);
                     h.customerStartMenu();
                 }
             
@@ -53,19 +55,19 @@ public class HomeCustomer {
     }
 
     static void clearScreen() {
-		try{
-			final String osName = System.getProperty("os.name");
-			if (osName.toLowerCase().contains("windows"))
-				new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-			else
-				new ProcessBuilder("clear").inheritIO().start().waitFor();
-		}
-		catch(IOException ex){
-				System.out.println(ex.getMessage());
-		}
-		catch(InterruptedException ex){
-				System.out.println(ex.getMessage());				
-		}
+		// try{
+		// 	final String osName = System.getProperty("os.name");
+		// 	if (osName.toLowerCase().contains("windows"))
+		// 		new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+		// 	else
+		// 		new ProcessBuilder("clear").inheritIO().start().waitFor();
+		// }
+		// catch(IOException ex){
+		// 		System.out.println(ex.getMessage());
+		// }
+		// catch(InterruptedException ex){
+		// 		System.out.println(ex.getMessage());				
+		// }
 	}
 
     public void customerStartMenu() throws IOException, InterruptedException {
