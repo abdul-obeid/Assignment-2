@@ -5,6 +5,7 @@ public class Rider extends User{
 	private String name;
 	private String phoneNumber;
 	private Order currentOrder;
+	private String currentOrderLabel;
 	ArrayList<Order> pastOrders = new ArrayList<>();
 	private int queuePos;
 	private int deliveryCount;
@@ -24,6 +25,20 @@ public class Rider extends User{
 		}
 	}
 	
+	public Rider(String username) throws IOException {   //Constructor used for login
+        super(null, null);
+        Scanner ridInfo = new Scanner(new File("Rider/"+ username + "/basicInfo.txt"));  // Reading rider information from basicInfo.txt
+        this.setUsername(ridInfo.nextLine());
+        this.setPassword(ridInfo.nextLine());
+		this.name = ridInfo.nextLine();
+        this.phoneNumber = ridInfo.nextLine();
+        this.queuePos = Integer.parseInt(ridInfo.nextLine());
+        this.deliveryCount = Integer.parseInt(ridInfo.nextLine());
+        this.currentOrderLabel = ridInfo.nextLine();
+		if(!currentOrderLabel.equals("null"))
+			setCurrentOrderFromFiles();
+    }
+	
 	
 	private void sendRiderToFile() throws FileNotFoundException{ // used to make a directory for the rider
 		ridDir = new File("Rider/" + getUsername());
@@ -34,7 +49,40 @@ public class Rider extends User{
 		outputRidInfo.println(getPassword());
 		outputRidInfo.println(name); 
 		outputRidInfo.println(phoneNumber);
+		outputRidInfo.println(queuePos);
+		outputRidInfo.println(deliveryCount);
+		outputRidInfo.println(currentOrderLabel);
 		outputRidInfo.close(); // close basicInfo.txt file
+	}
+	
+	private void setCurrentOrderFromFiles (){
+		int stopIndex = 0;
+		for(int i = 0; i < currentOrderLabel.length(); ++i){
+			if(currentOrderLabel.charAt(i) == '_')
+				stopIndex = i;
+		}
+		String cusUsername = currentOrderLabel.substring(0, stopIndex);
+		try{
+			File currentOrderFile = new File("Customer/" + cusUsername + "/Order/" + currentOrderLabel+ ".txt");
+			currentOrder = new Order(currentOrderFile);
+		}
+		catch(IOException ex){
+			System.out.println(ex.getMessage());
+		}
+	}
+	
+	public void deliverCurrentOrder(){
+		try{
+			getCurrentOrder().replaceOrderStatus(currentOrder, "Delivered");
+			currentOrderLabel = null;
+			++deliveryCount;
+			sendRiderToFile();
+			
+		}
+		catch(IOException ex){
+			System.out.println(ex.getMessage());
+		}
+		
 	}
 	
 	public String getName(){

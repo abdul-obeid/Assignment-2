@@ -201,11 +201,11 @@ public class RestaurantUI{
 			try{
 				int dashCohice = scan.nextInt();
 				if(dashCohice == 1){
-					for(int i = 0; i < restaurant.getPastOrders().size(); ++i){
+					// for(int i = 0; i < restaurant.getPastOrders().size(); ++i){
 						showAndUpdateCurrentOrders(restaurant);
 						resturantDashboard(restaurant);
-					break;
-					}
+						break;
+					// }
 				}
 				else if(dashCohice == 2){
 					clearScreen();
@@ -250,7 +250,7 @@ public class RestaurantUI{
 	}
 	 static void showAndUpdateCurrentOrders(Restaurant restaurant){ // show the orders and update the status to ready
 		Scanner scan = new Scanner(System.in);
-		if(restaurant.getPastOrders().size() == 0){
+		if(restaurant.getCurrentOrders().size() == 0){
 			System.out.print("you have no orders in the meanTime");
 			// return;
 			loadingWait();
@@ -259,56 +259,84 @@ public class RestaurantUI{
 			clearScreen(); // clear the screen
 			System.out.println();
 			System.out.println();
-			for(int i = 0; i < restaurant.getPastOrders().size(); ++i){
-				if(!restaurant.getPastOrders().get(i).getOrderStatus().equals("Collected"))
-					System.out.println("\t\t " + (i+1) +"# " + restaurant.getPastOrders().get(i));
+			for(int i = 0; i < restaurant.getCurrentOrders().size(); ++i){
+				// if(!restaurant.getCurrentOrder().get(i).getOrderStatus().equals("Collected") && !restaurant.getPastOrders().get(i).getOrderStatus().equals("Delivered"))
+					System.out.println("\t\t " + (i+1) +"# " + restaurant.getCurrentOrders().get(i));
 			}
 			System.out.print("\n\n\t\t" + "choose number of order to show or update: ");
 			int choosenOrder = (scan.nextInt() - 1);
 			do{
 				clearScreen();
 				System.out.println("+----------------------------------------------------+");
-				System.out.println("|\tOrder ID: " + restaurant.getPastOrders().get(choosenOrder).getID());
-				System.out.println("|\tCustomer Username: " + restaurant.getPastOrders().get(choosenOrder).getCusUsername());
-				System.out.println("|\tTime Requested: " + restaurant.getPastOrders().get(choosenOrder).getTimeRequested());
-				System.out.println("|\tOrder Status: " + restaurant.getPastOrders().get(choosenOrder).getOrderStatus());
+				System.out.println("|\tOrder ID: " + restaurant.getCurrentOrders().get(choosenOrder).getID());
+				System.out.println("|\tOrder Type: " + restaurant.getCurrentOrders().get(choosenOrder).getOrderType());
+				System.out.println("|\tCustomer Username: " + restaurant.getCurrentOrders().get(choosenOrder).getCusUsername());
+				System.out.println("|\tTime Requested: " + restaurant.getCurrentOrders().get(choosenOrder).getTimeRequested());
+				System.out.println("|\tOrder Status: " + restaurant.getCurrentOrders().get(choosenOrder).getOrderStatus());
 				System.out.println("|\tOrder Contents: " );
-				for(int i = 0; i < restaurant.getPastOrders().get(choosenOrder).getOrderContents().size(); ++i){
-					System.out.println("|\t\tItem #" + (i+1) + " Name: " + restaurant.getPastOrders().get(choosenOrder).getOrderContents().get(i).getItemName());
-					System.out.println("|\t\tItem ID: " + restaurant.getPastOrders().get(choosenOrder).getOrderContents().get(i).getItemID());
-					System.out.println("|\t\tItem Price: " + restaurant.getPastOrders().get(choosenOrder).getOrderContents().get(i).getItemPrice());
+				for(int i = 0; i < restaurant.getCurrentOrders().get(choosenOrder).getOrderContents().size(); ++i){
+					System.out.println("|\t\tItem #" + (i+1) + " Name: " + restaurant.getCurrentOrders().get(choosenOrder).getOrderContents().get(i).getItemName());
+					System.out.println("|\t\tItem ID: " + restaurant.getCurrentOrders().get(choosenOrder).getOrderContents().get(i).getItemID());
+					System.out.println("|\t\tItem Price: " + restaurant.getCurrentOrders().get(choosenOrder).getOrderContents().get(i).getItemPrice());
 					System.out.println("|");
 				}
-				System.out.println("|\tTotal Price: RM" + restaurant.getPastOrders().get(choosenOrder).getOrderPrice());
+				System.out.println("|\tTotal Price: RM" + restaurant.getCurrentOrders().get(choosenOrder).getOrderPrice());
 				System.out.println("|\n|\t1) Update Order Status ");
 				System.out.println("|\t2) Back to Restaurant Dashboard ");
 				System.out.print("|\t>>");
 				int choosenAction = scan.nextInt();
 				if(choosenAction == 1){
-					System.out.println("|\n|\n|\t1)Change to Ready ");
-					System.out.println("|\t2)Change to Collected ");
-					System.out.print("|\t>>");
-					int newStatus = scan.nextInt();
-					if(newStatus == 1){
-						try{
-							restaurant.getPastOrders().get(choosenOrder).replaceOrderStatus(restaurant.getPastOrders().get(choosenOrder), "Ready");
-							// customer.getCurrentOrder().setOrderStatus("Ready");
+					if(restaurant.getCurrentOrders().get(choosenOrder).getOrderType().equals("Collection")){
+						System.out.println("|\n|\n|\t1)Change to Ready ");
+						System.out.println("|\t2)Change to Collected ");
+						System.out.print("|\t>>");
+						int newStatus = scan.nextInt();
+						if(newStatus == 1){
+							try{
+								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Ready");
+								// customer.getCurrentOrder().setOrderStatus("Ready");
+							}
+							catch(IOException ex){
+								System.out.println(ex.getMessage());
+							}
 						}
-						catch(IOException ex){
-							System.out.println(ex.getMessage());
+						else if(newStatus == 2){
+							try{
+								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Collected");
+								// customer.getCurrentOrder().setOrderStatus("Ready");
+							}
+							catch(IOException ex){
+								System.out.println(ex.getMessage());
+							}
 						}
+						else
+							throw new InputMismatchException();
 					}
-					else if(newStatus == 2){
-						try{
-							restaurant.getPastOrders().get(choosenOrder).replaceOrderStatus(restaurant.getPastOrders().get(choosenOrder), "Collected");
-							// customer.getCurrentOrder().setOrderStatus("Ready");
+					else{
+						System.out.println("|\n|\n|\t1)Change to Ready ");
+						System.out.println("|\n|\n|\t2)Change to Delivering ");
+						int newStatus = scan.nextInt();
+						if(newStatus == 1){
+							try{
+								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Ready");
+								// customer.getCurrentOrder().setOrderStatus("Ready");
+							}
+							catch(IOException ex){
+								System.out.println(ex.getMessage());
+							}
 						}
-						catch(IOException ex){
-							System.out.println(ex.getMessage());
+						else if(newStatus == 2){
+							try{
+								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Delivering");
+								// customer.getCurrentOrder().setOrderStatus("Ready");
+							}
+							catch(IOException ex){
+								System.out.println(ex.getMessage());
+							}
 						}
+						else
+							throw new InputMismatchException();
 					}
-					else
-						throw new InputMismatchException();
 				}
 				else if(choosenAction == 2){
 					break;

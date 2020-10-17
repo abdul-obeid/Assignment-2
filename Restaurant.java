@@ -74,6 +74,10 @@ public class Restaurant extends User{
 		catch(IOException ex){
 			System.out.println("File not found: " + ex.getMessage());
 		}
+		// for (int i = 0; i < pastOrders.size(); ++i){
+			// if(!pastOrders.get(i).getOrderStatus().equals("Collected") && !pastOrders.get(i).getOrderStatus().equals("Delivered"))
+				// currentOrders.add(pastOrders.get(i));
+		// }
 		return currentOrders;
 	}
 	
@@ -96,13 +100,15 @@ public class Restaurant extends User{
 	
 	private void readOrderHistoryFromFiles() throws IOException{
 		pastOrders.clear(); // clear the menuContents to avoid redundant items
+		currentOrders.clear(); // clear the menuContents to avoid redundant items
 		File pastOrdersFileInput = new File(restDir + "/Order/names.txt" );
 		Scanner inputOrders = new Scanner(pastOrdersFileInput);
 		while(inputOrders.hasNext()){
 			File orderFile = new File(restDir + "/Order/" + inputOrders.nextLine() + ".txt");
 			// Scanner OrderNameScanner = new Scanner(orderFile);
 			pastOrders.add(new Order(orderFile));
-			currentOrders.add(new Order(orderFile));
+			if(!pastOrders.get(pastOrders.size()-1).getOrderStatus().equals("Collected") && !pastOrders.get(pastOrders.size()-1).getOrderStatus().equals("Delivered"))
+				currentOrders.add(pastOrders.get(pastOrders.size()-1));
 		}
 		inputOrders.close();
 	}
