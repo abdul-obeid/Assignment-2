@@ -145,6 +145,11 @@ public class HomeCustomer {
                     System.out.println("Error: Username already taken. Please try another one.");
                     customerRegisterScreen();
                 }
+                else if (userCreateAttempt.contains("_")) {
+                    clearScreen();
+                    System.out.println("Error: Username cannot contain an underscore \"_\". Please try again.");
+                    customerRegisterScreen();
+                }
                 else {
                     clearScreen();
                     System.out.println("========================================================================");
@@ -159,7 +164,15 @@ public class HomeCustomer {
                     System.out.println("========================================================================");
                     String nameCreateAttempt = input.next();
 
-                    Customer c = new Customer(nameCreateAttempt, userCreateAttempt, passCreateAttempt);
+                    clearScreen();
+                    System.out.println("========================================================================");
+                    System.out.println("Please enter your address(E.g. \"14 Main St., 53000 KL\")" );
+                    System.out.println("Alternatively, enter \"BACK\" to go to the previous menu. ");
+                    System.out.println("========================================================================");
+                    String addressCreateAttempt = input.nextLine();
+
+
+                    Customer c = new Customer(nameCreateAttempt, userCreateAttempt, passCreateAttempt, addressCreateAttempt);
                     customerStartMenu();
                 }
             } catch (IOException e) {
@@ -244,46 +257,47 @@ public class HomeCustomer {
     public void customerActiveOrderMenu(Customer c) throws IOException, InterruptedException{
         clearScreen();
         Scanner input = new Scanner(System.in);
-        if (c.getCurrentOrder() == null) {
+        if (c.getCurrentOrder().isEmpty()) {
             System.out.println("========================================================================");
             System.out.println("No current order. Enter anything to go back to previous menu. ");
             System.out.println("========================================================================");
         input.next();
         customerMainMenu(c);
         }
-        else if (c.getCurrentOrder() != null){
+        else if (!c.getCurrentOrder().isEmpty()){
+            for (int i = 0; i < c.getCurrentOrder().size(); i++){
             System.out.println("========================================================================");
-            System.out.println("Active Order: ");
-            System.out.println("ID: " + c.getCurrentOrder().getID()+". ");
-            System.out.println("Restaurant: " + c.getCurrentOrder().getResName()+". ");
-            System.out.println("Price: " +c.getCurrentOrder().getOrderPrice()+"RM. ");
-            System.out.println("Status: " +c.getCurrentOrder().getOrderStatus());
-
+            System.out.println("Active Orders: ");
+            System.out.println("ID: " + c.getCurrentOrder().get(i).getID()+". ");
+            System.out.println("Restaurant: " + c.getCurrentOrder().get(i).getResName()+". ");
+            System.out.println("Price: " +c.getCurrentOrder().get(i).getOrderPrice()+"RM. ");
+            System.out.println("Status: " +c.getCurrentOrder().get(i).getOrderStatus());
             System.out.println("========================================================================");
+            }
             System.out.println("\nPlease enter the number corresponding with your desired option: "); 
-            System.out.println("1. Set order as Collected ");
-            System.out.println("2. Back to previous menu ");
+            //System.out.println("1. Set order as Collected ");
+            System.out.println("1. Back to previous menu ");
             System.out.println("========================================================================");
             int choice = input.nextInt();
+            // if (choice == 1){
+            //     try{
+            //     Order.replaceOrderStatus(c.getCurrentOrder().get(0), "Collected");
+            //     c.setCurrentOrder(null);
+            //     customerMainMenu(c);
+            //     }
+            //     catch (Exception e) {
+            //     System.out.println("Error. Please try again. ");
+            //     Thread.sleep(500);
+            //     customerActiveOrderMenu(c);
+            //     }
+            // }
             if (choice == 1){
-                try{
-                Order.replaceOrderStatus(c.getCurrentOrder(), "Collected");
-                c.setCurrentOrder(null);
-                customerMainMenu(c);
-                }
-                catch (Exception e) {
-                System.out.println("Error. Please try again. ");
-                Thread.sleep(500);
-                customerActiveOrderMenu(c);
-                }
-            }
-            else if (choice == 2){
                 customerMainMenu(c);
             }
         }
         else {
             System.out.println("Error: returning to previous menu. ");
-            Thread.sleep(500);
+            Thread.sleep(2000);
             customerMainMenu(c);
         }
     }
@@ -371,19 +385,20 @@ public class HomeCustomer {
         }
         System.out.println("\n");
         System.out.println("========================================================================");
-        System.out.println("\n1. Confirm order ");
-        System.out.println("2. Remove item");
-        System.out.println("3. Empty cart ");
-        System.out.println("4. Back to restaurant");
+        System.out.println("\n1. Confirm order as collection");
+        System.out.println("2. Confirm order as delivery");
+        System.out.println("3. Remove item");
+        System.out.println("4. Empty cart ");
+        System.out.println("5. Back to restaurant");
         System.out.println("========================================================================");
 
 
         Scanner input = new Scanner(System.in);
         int choice = input.nextInt();
 
-        if (choice == 1 && (c.getCurrentOrder() == null)) {
-            Order o = c.createNewOrder(r, crt);
-            c.setCurrentOrder(o);
+        if (choice == 1) {
+            Order o = c.createNewOrder(r, crt, "Collection", c.getAddress());
+            c.addToCurrentOrder(o);
             System.out.println("Current order: " + c.getCurrentOrder()); /////////Debugging
             r.addToCurrentOrders(o);
             System.out.println("Order successfully created.");
@@ -395,12 +410,34 @@ public class HomeCustomer {
 
             customerMainMenu(c);
         }
-        else if (choice == 1 && (c.getCurrentOrder()!=null)){
-            System.out.println("Error: Customers are limited to 1 active order at a time.");
-            Thread.sleep(500);
-            customerViewCartMenu(c, r, crt);
-        }
+        // else if (choice == 1 && (c.getCurrentOrder()!=null)){
+        //     System.out.println("Error: Customers are limited to 1 active order at a time.");
+        //     Thread.sleep(2000);
+        //     customerViewCartMenu(c, r, crt);
+        // }
         else if (choice == 2) {
+            Scanner addressIn = new Scanner(System.in);
+            clearScreen();
+            System.out.println("\n");
+            System.out.println("========================================================================");
+            System.out.println("Please enter your delivery address:");
+            System.out.println("========================================================================");
+            String inputAddress = addressIn.nextLine();
+            Order o = c.createNewOrder(r, crt, "Delivery", inputAddress);
+            c.addToCurrentOrder(o);
+            System.out.println("Current order: " + c.getCurrentOrder()); /////////Debugging
+            r.addToCurrentOrders(o);
+            System.out.println("Order successfully created.");
+            Thread.sleep(1000);
+
+            //int startSize = crt.getChosenItems().size();
+            // for (int i = 0 ; i<  startSize; i++) {
+            //     crt.removeItem(crt.getChosenItems().get(i));
+            // }
+
+            customerMainMenu(c);
+        }
+        else if (choice == 3) {
             clearScreen();
             System.out.println("Please select item to remove.");
             int menuChoices = 1;
@@ -437,7 +474,7 @@ public class HomeCustomer {
         }
         else {
             System.out.println("Error: Please enter one of the available options.");
-            Thread.sleep(500);
+            Thread.sleep(2000);
             customerViewCartMenu(c, r, crt);
         }
     }

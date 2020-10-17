@@ -81,6 +81,9 @@ public class Customer extends User {
     public void setCurrentOrder(ArrayList<Order> newOrder) {
         this.currentOrders = newOrder;
     }
+    public void addToCurrentOrder(Order newOrder) {
+        this.currentOrders.add(newOrder);
+    }
     public ArrayList<Order> getPastOrders() {
         return this.pastOrders;
     }
