@@ -258,6 +258,7 @@ public class AdminUI {
         System.out.println("\nPlease enter the rider's new name: ");
         String newName = input.nextLine();
 
+        r.setName(newName);
         File riderInfo = new File("Rider\\"+ r.getUsername() + "\\basicInfo.txt");
         Order.replaceLines(riderInfo, newName, 3);
 
@@ -280,6 +281,7 @@ public class AdminUI {
         System.out.println("\nPlease enter the rider's new password: ");
         String newPass = input.nextLine();
 
+        r.setPassword(newPass);
         File riderInfo = new File("Rider\\"+ r.getUsername() + "\\basicInfo.txt");
         Order.replaceLines(riderInfo, newPass, 2);
 
@@ -295,6 +297,7 @@ public class AdminUI {
         System.out.println("\nPlease enter the rider's new phone number: ");
         String newPhone = input.nextLine();
 
+        r.setPhoneNum(newPhone);
         File riderInfo = new File("Rider\\"+ r.getUsername() + "\\basicInfo.txt");
         Order.replaceLines(riderInfo, newPhone, 4);
 
@@ -318,6 +321,27 @@ public class AdminUI {
             manageRidersScreen2(a, r);
         }
         else if (choice == "Y") {
+            ArrayList<Rider> riderList = new ArrayList<Rider>();
+            if (new File("Rider\\riderList.txt").exists()) {
+                File riderListTxt = new File("Rider\\riderList.txt");
+                Scanner riderListReader = new Scanner(riderListTxt);
+                while (riderListReader.hasNext()){
+                    riderList.add(new Rider(riderListReader.nextLine()));
+                }
+            }
+            riderList.remove(r);
+
+            StringBuilder source = new StringBuilder();
+            for (Rider rid : riderList) {
+                source.append("\n" + rid.getUsername())
+            }
+
+            File riderListTxt = new File("Rider\\riderList.txt");
+            riderListTxt.createNewFile();
+            FileWriter riderListFileWriter = new FileWriter(riderListTxt, false);
+            riderListFileWriter.write(source);
+            riderListFileWriter.close();
+
             File riderDirectory = new File("Rider\\"+ r.getUsername());
             riderDirectory.delete();
             manageRidersScreen2(a, r);
