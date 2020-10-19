@@ -133,7 +133,7 @@ public class AdminUI {
         System.out.println("========================================================================");
         System.out.println("Desired username: (E.g. \"ryab12\") ");
         String usernameAttempt = input.nextLine();
-        if (riderList.contains(usernameAttempt)) {
+        if (riderList.contains(new Rider(usernameAttempt))) {
             System.out.println("Error: Username already taken. Please try a different one. ");
             addNewRiderScreen(a);
         }

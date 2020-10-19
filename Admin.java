@@ -66,16 +66,47 @@ public class Admin extends User{
         this.pastOrders = newPastOrders;
     }
 
-    public static MyQueue<Rider> getRiderQueue() {
-        return riderQueue;
+    public static MyQueue<Rider> getRiderQueue() throws IOException{
+        MyQueue<Rider> riderQueueObj = new MyQueue<Rider>();
+        if (new File("Rider\\riderQueue.txt").exists()) {
+            File riderQueueTxt = new File("Rider\\riderQueue.txt");
+            Scanner riderQueueReader = new Scanner(riderQueueTxt);
+            while (riderQueueReader.hasNext()){
+                riderQueueObj.add(new Rider(riderQueueReader.nextLine()));
+            }
+            return riderQueueObj;
+        }
+        else {
+            File riderQueueTxt = new File("Rider\\riderQueue.txt");
+            riderQueueTxt.createNewFile();
+            return new MyQueue<Rider>();
+        }
     }
-    public static void setRiderQueue(MyQueue<Rider> newRiderQueue){
+
+    public static void setRiderQueue(MyQueue<Rider> newRiderQueue){ //change this to setting the file to the queue argument
         riderQueue = newRiderQueue;
     }
-    public static MyQueue<Order> getOrderQueue() {
-        return orderQueue;
+
+    public static MyQueue<Order> getOrderQueue() throws IOException{
+        MyQueue<Order> orderQueueObj = new MyQueue<Order>();
+        if (new File("Rider\\orderQueue.txt").exists()) {
+            File orderQueueTxt = new File("Rider\\orderQueue.txt");
+            Scanner orderQueueReader = new Scanner(orderQueueTxt);
+
+            String readerInput;
+            while (orderQueueReader.hasNext()){
+                readerInput = orderQueueReader.nextLine();
+                orderQueueObj.add(new Order("Customer\\"+ readerInput.split("_")[0] + "\\" +readerInput));
+            }
+            return orderQueueObj;
+        }
+        else {
+            File orderQueueTxt = new File("Rider\\orderQueue.txt");
+            orderQueueTxt.createNewFile();
+            return new MyQueue<Order>();
+        }
     }
-    public static void setOrderQueue(MyQueue<Order> newOrderQueue){
+    public static void setOrderQueue(MyQueue<Order> newOrderQueue){ //change this to setting the file to the queue argument
         orderQueue = newOrderQueue;
     }
     public static void addToOrderQueue(Order newOrder){
