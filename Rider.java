@@ -53,6 +53,7 @@ public class Rider extends User{
 		outputRidInfo.println(deliveryCount);
 		outputRidInfo.println(currentOrderLabel);
 		outputRidInfo.close(); // close basicInfo.txt file
+		new File(ridDir + "/Order").mkdirs();
 	}
 	
 	private void setCurrentOrderFromFiles (){
@@ -74,7 +75,9 @@ public class Rider extends User{
 	public void deliverCurrentOrder(){
 		try{
 			getCurrentOrder().replaceOrderStatus(currentOrder, "Delivered");
+			sendCompletedOrderToFiles();
 			currentOrderLabel = null;
+			currentOrder = null;
 			++deliveryCount;
 			sendRiderToFile();
 			
@@ -82,6 +85,33 @@ public class Rider extends User{
 		catch(IOException ex){
 			System.out.println(ex.getMessage());
 		}
+		
+	}
+	
+	private void sendCompletedOrderToFiles() throws IOException{
+		ridDir = new File("Rider/" + getUsername());
+		ridDir.mkdir();
+		FileWriter NamesFileOutput = new FileWriter(ridDir + "/Order/names.txt", true);
+		PrintWriter outputNames =  new PrintWriter(NamesFileOutput);
+		outputNames.println(currentOrderLabel);
+		outputNames.close();
+		
+		
+		File OrderFile = new File(ridDir + "/Order/" + currentOrderLabel + ".txt"); 
+		PrintWriter outputOrder =  new PrintWriter(OrderFile);
+		
+		outputOrder.println(currentOrder.getID());
+		outputOrder.println(currentOrder.getCusUsername());
+		outputOrder.println(currentOrder.getResName());
+		outputOrder.println(currentOrder.getOrderStatus());
+		outputOrder.println(currentOrder.getOrderPrice());
+		outputOrder.println(currentOrder.getOrderType());
+		outputOrder.println(currentOrder.getDelAddress());
+
+        for (int i = 0; i< currentOrder.getOrderContents().size(); i++) {
+            outputOrder.println(currentOrder.getOrderContents().get(i).writeToOrder()); //Writes item information to file
+        }
+		outputOrder.close();
 		
 	}
 	
@@ -109,6 +139,21 @@ public class Rider extends User{
 		this.currentOrder = currentOrder;
 	}
 	
+	public Order getCurrentOrderLabel(){
+		return currentOrder;
+	}
+	
+	public void setCurrentOrderLabel(String currentOrderLabel){
+		this.currentOrderLabel = currentOrderLabel;
+		setCurrentOrderFromFiles();
+		try{
+			sendRiderToFile();
+		}
+		catch(IOException ex){
+			System.out.println(ex.getMessage());
+		}
+	}
+	
 	public ArrayList<Order> getPastOrders(){
 		return pastOrders;
 	}
@@ -116,6 +161,18 @@ public class Rider extends User{
 	public void setPastOrders(ArrayList<Order> pastOrders){
 		this.pastOrders = pastOrders;
 	}
+	
+	// private void readOrderHistoryFromFiles() throws IOException{
+		// pastOrders.clear(); // clear the pastOrders to avoid redundant items
+		// File pastOrdersFileInput = new File(ridDir + "/Order/names.txt" );
+		// Scanner inputOrders = new Scanner(pastOrdersFileInput);
+		// while(inputOrders.hasNext()){
+			// File orderFile = new File(ridDir + "/Order/" + inputOrders.nextLine() + ".txt");
+			// Scanner OrderNameScanner = new Scanner(orderFile);
+			// pastOrders.add(new Order(orderFile));
+		// }
+		// inputOrders.close();
+	// }
 	
 	public int getQueuePos(){
 		return queuePos;

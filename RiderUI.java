@@ -4,7 +4,7 @@ public class RiderUI{
 	public static void  main(String[] args){
 		File allRidersDir = new File("Rider");
 		allRidersDir.mkdir();
-		// Rider r = new Rider("saber01","sub009","Saber","0113724413");
+		Rider r = new Rider("saber01","sub009","Saber","0113724413");
 		loginScreen();
 		
 	}
@@ -83,17 +83,16 @@ public class RiderUI{
 				checkCurrentOrder(rider);
 			}
 			else if(dashCohice == 2){
-			
+				System.out.println(rider.getQueuePos());
 			}
 			else if(dashCohice == 3){
-			
+				
 			}
 			else if(dashCohice == 4){
 				break;
 			}
 		}while(true);
-	}
-		
+	}	
 	public static void checkCurrentOrder(Rider rider){
 		Scanner scan = new Scanner(System.in);
 		if(rider.getCurrentOrder() == null)

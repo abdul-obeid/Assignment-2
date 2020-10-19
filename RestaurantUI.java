@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.*;
 
 public class RestaurantUI{
+		static MyQueue<Rider> riderQueue = new MyQueue<>(); // temp
+		
 	public static void  main(String[] args){
 		File allRestDir = new File("Restaurant");
 		allRestDir.mkdir();
@@ -10,7 +12,10 @@ public class RestaurantUI{
 									new Restaurant ("Mamak Spot", "0123456789", "0123456789", "Mamak Station brings you the best in comfort food from the diverse street vendors of Malaysia. Our food is a celebration of flavors...layered from Chinese, Indian, and Malay roots.", "2 Jalan Robertson, G4 & G5, Idaman Robertson, Kuala Lumpur, MY 50150")};
 		
 		setDefaultItems(restaurants);
+		riderQueue.add(new Rider("saber01","sub009","Saber","0113724413"));
+		riderQueue.add(new Rider("julio32","jul009","Julio","0114578665"));
 		selectRestaurant(restaurants);
+		
 		
 		// try{
 			// restaurants[0].getMenu().showItems();
@@ -328,6 +333,7 @@ public class RestaurantUI{
 						else if(newStatus == 2){
 							try{
 								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Delivering");
+								riderQueue.poll().setCurrentOrderLabel(restaurant.getCurrentOrders().get(choosenOrder).getCusUsername() + "_" + restaurant.getCurrentOrders().get(choosenOrder).getID());
 								// customer.getCurrentOrder().setOrderStatus("Ready");
 							}
 							catch(IOException ex){
