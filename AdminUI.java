@@ -315,12 +315,12 @@ public class AdminUI {
         System.out.println("Rider phone number: " + r.getPhoneNum());
         System.out.println("========================================================================\n\n");
         System.out.println("Please enter Y/N");
-        String choice = input.next();
+        char choice = input.next().toCharArray()[0];
 
-        if (choice == "N") {
+        if (choice == 'N') {
             manageRidersScreen2(a, r);
         }
-        else if (choice == "Y") {
+        else if (choice == 'Y') {
             ArrayList<Rider> riderList = new ArrayList<Rider>();
             if (new File("Rider\\riderList.txt").exists()) {
                 File riderListTxt = new File("Rider\\riderList.txt");
@@ -332,24 +332,27 @@ public class AdminUI {
             riderList.remove(r);
 
             StringBuilder source = new StringBuilder();
-            for (Rider rid : riderList) {
-                source.append("\n" + rid.getUsername())
+            for (int i = 0; i < riderList.size(); i++) {
+                if (riderList.get(i) != null) {
+                source.append("\n" + riderList.get(i).getUsername());
+                }
             }
 
             File riderListTxt = new File("Rider\\riderList.txt");
             riderListTxt.createNewFile();
             FileWriter riderListFileWriter = new FileWriter(riderListTxt, false);
-            riderListFileWriter.write(source);
+            riderListFileWriter.write(source.toString());
             riderListFileWriter.close();
 
             File riderDirectory = new File("Rider\\"+ r.getUsername());
             riderDirectory.delete();
-            manageRidersScreen2(a, r);
+            manageRidersScreen1(a);
         }
-        else {
-            System.out.println("We encountered an error processing your request. Please try again later.");
-            Thread.sleep(2000);
-        }
+        // else {
+        //     System.out.println("We encountered an error processing your request. Please try again later.");
+        //     Thread.sleep(2000);
+        //     manageRidersScreen2(a, r);
+        // }
     }
 
     // public static void confirmDeleteRiderScreen(Admin a, Rider r) throws IOException, InterruptedException{
