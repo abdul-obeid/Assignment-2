@@ -212,24 +212,123 @@ public class AdminUI {
         }
     }
     public static void manageRidersScreen2(Admin a, Rider r) throws IOException, InterruptedException{
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("========================================================================");
+        System.out.println("Rider name: " + r.getName());
+        System.out.println("Rider username: " + r.getUsername());
+        System.out.println("Rider password: " + r.getPassword());
+        System.out.println("Rider phone number: " + r.getPhoneNum());
+        System.out.println("========================================================================");
+        System.out.println("Please select an option: ");
+        System.out.println("======================================================================== " + "\n\n");
+
+
+        System.out.println("1) Edit name");
+        System.out.println("2) Edit password");
+        System.out.println("3) Edit phone");
+        System.out.println("4) Delete rider");
+        System.out.println("5) Back");
+
+        int choice = input.nextInt();
+        if (choice == 1) {
+            editRiderNameScreen(a, r);
+        }
+        else if (choice == 2) {
+            editRiderPasswordScreen(a, r);
+        }
+        else if (choice == 3) {
+            editRiderPhoneScreen(a, r);
+        }
+        else if (choice == 4) {
+            deleteRiderScreen(a, r);
+        }
+        else if (choice == 5) {
+            viewRidersScreen(a);
+        }
 
     }
-    public static void editRiderNameScreen(Admin a) throws IOException, InterruptedException{
+    public static void editRiderNameScreen(Admin a, Rider r) throws IOException, InterruptedException{
+        Scanner input = new Scanner(System.in);
 
-    }
-    public static void editRiderUsernameScreen(Admin a) throws IOException, InterruptedException{
+        System.out.println("========================================================================");
+        System.out.println("Previous name: " + r.getName());
 
-    }
-    public static void editRiderPasswordScreen(Admin a) throws IOException, InterruptedException{
+        System.out.println("========================================================================");
+        System.out.println("\nPlease enter the rider's new name: ");
+        String newName = input.nextLine();
 
-    }
-    public static void editRiderPhoneScreen(Admin a) throws IOException, InterruptedException{
+        File riderInfo = new File("Rider\\"+ r.getUsername() + "\\basicInfo.txt");
+        Order.replaceLines(riderInfo, newName, 3);
 
+        manageRidersScreen2(a, r);
     }
-    public static void deleteRiderScreen(Admin a) throws IOException, InterruptedException{
 
-    }
-    public static void confirmDeleteRiderScreen(Admin a) throws IOException, InterruptedException{
 
+    // public static void editRiderUsernameScreen(Admin a, Rider r) throws IOException, InterruptedException{
+
+    // }
+
+
+    public static void editRiderPasswordScreen(Admin a, Rider r) throws IOException, InterruptedException{
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("========================================================================");
+        System.out.println("Previous password: " + r.getPassword());
+
+        System.out.println("========================================================================");
+        System.out.println("\nPlease enter the rider's new password: ");
+        String newPass = input.nextLine();
+
+        File riderInfo = new File("Rider\\"+ r.getUsername() + "\\basicInfo.txt");
+        Order.replaceLines(riderInfo, newPass, 2);
+
+        manageRidersScreen2(a, r);
     }
+
+    public static void editRiderPhoneScreen(Admin a, Rider r) throws IOException, InterruptedException{
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("========================================================================");
+        System.out.println("Previous phone number: " + r.getPhoneNum());
+        System.out.println("========================================================================");
+        System.out.println("\nPlease enter the rider's new phone number: ");
+        String newPhone = input.nextLine();
+
+        File riderInfo = new File("Rider\\"+ r.getUsername() + "\\basicInfo.txt");
+        Order.replaceLines(riderInfo, newPhone, 4);
+
+        manageRidersScreen2(a, r);
+    }
+
+    public static void deleteRiderScreen(Admin a, Rider r) throws IOException, InterruptedException{
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("========================================================================");
+        System.out.println("Are you sure you want to delete this rider? \n");
+        System.out.println("Rider name: " + r.getName());
+        System.out.println("Rider username: " + r.getUsername());
+        System.out.println("Rider password: " + r.getPassword());
+        System.out.println("Rider phone number: " + r.getPhoneNum());
+        System.out.println("========================================================================\n\n");
+        System.out.println("Please enter Y/N");
+        String choice = input.next();
+
+        if (choice == "N") {
+            manageRidersScreen2(a, r);
+        }
+        else if (choice == "Y") {
+            File riderDirectory = new File("Rider\\"+ r.getUsername());
+            riderDirectory.delete();
+            manageRidersScreen2(a, r);
+        }
+        else {
+            System.out.println("We encountered an error processing your request. Please try again later.");
+            Thread.sleep(2000);
+        }
+    }
+
+    // public static void confirmDeleteRiderScreen(Admin a, Rider r) throws IOException, InterruptedException{
+
+    // }
 }
