@@ -77,7 +77,7 @@ public class MyQueue<E> {
 	}
 	
 	public boolean isEmpty() {
-		return (head == tail);
+		return size == 0;
     }
 
 	@Override
