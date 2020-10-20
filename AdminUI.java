@@ -174,7 +174,7 @@ public class AdminUI {
         mainScreen(a);
     }
 
-    public static void viewOrderHistories(Admin a) throws IOException, InterruptedException{
+    public static void viewOrderHistories(Admin a) throws IOException, InterruptedException{        // FIX FORMATTING!!!!!!!!!!!!!!!!!!!!!!!!
         System.out.println("=================================================================================================================");
         System.out.println("Combined order history: ");
         System.out.println("=================================================================================================================");
