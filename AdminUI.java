@@ -5,8 +5,13 @@ public class AdminUI {
     public static void main(String [] args) {
         try {
             loginScreen();
+
+            //         Test iterating through files: 
+            // File [] test = new File("Customer").listFiles();
+            // for (int i = 0; i <= test.length; i++)
+            // System.out.println(test[i]);
         }
-        catch (Exception e) {
+        catch (IOException | InterruptedException e) {
             System.out.println("Error: " + e);
         }
 
@@ -80,6 +85,9 @@ public class AdminUI {
             viewCusOrderCount(a);
         }
         else if (choice == 4) {
+            viewOrderHistories(a);
+        }
+        else if (choice == 5) {
             loginScreen();
         }
     }
@@ -133,11 +141,48 @@ public class AdminUI {
     public static void viewResOrderCount(Admin a) throws IOException, InterruptedException{
 
     }
-    public static void viewCusOrderCount(Admin a) throws IOException, InterruptedException{
+    public static void viewCusOrderCount(Admin a) throws IOException, InterruptedException{ //ADD COMPARATORS!!!!!!!!!!!!!!!
+        File [] cusDirectoryList = new File("Customer").listFiles();
+        ArrayList<Customer> cusList = new ArrayList<Customer>();
+        for (int i = 0; i < cusDirectoryList.length; i++) {
+            String fullPath = cusDirectoryList[i].getPath();
+            String shortPath = fullPath.replace("Customer\\", "");
+            if (!shortPath.contains("lastID.txt")) {
+                cusList.add(new Customer(shortPath));
+            }
 
+            // cusList.add(new Customer(cusDirectoryList[i].getPath()));
+        }
+
+        ArrayList<Integer> cusOrderCounts = new ArrayList<Integer>();
+        for (int i = 0; i < cusList.size(); i++) {
+            File [] orderPaths = new File("Customer\\"+ cusList.get(i).getUsername()+ "\\Order").listFiles();
+            cusOrderCounts.add(orderPaths.length);
+        }
+
+        System.out.println("====================================================================");
+        System.out.println("Customers: ");
+        System.out.println("====================================================================");
+        System.out.println("Customer name                 Username                 Order count");
+        System.out.println("____________________________________________________________________\n");
+        for (int i = 0; i < cusList.size(); i++) {
+            System.out.println(cusList.get(i).getName() + "                 " + cusList.get(i).getUsername() + "                 " + (cusOrderCounts.get(i)-1));
+        }
+        System.out.println("Enter anything to go back to previous menu");
+        Scanner input = new Scanner(System.in);
+        input.next();
+        mainScreen(a);
     }
-    public static void viewOrderHistories(Admin a) throws IOException, InterruptedException{
 
+    public static void viewOrderHistories(Admin a) throws IOException, InterruptedException{
+        System.out.println("=================================================================================================================");
+        System.out.println("Combined order history: ");
+        System.out.println("=================================================================================================================");
+        System.out.println("Order ID        Customer Name       Restaurant Name        Order Price        Order Type        Assigned Rider");
+        System.out.println("_________________________________________________________________________________________________________________\n");
+        for (Order o : a.getPastOrders()){
+            System.out.println(o.getID() + "        " + o.getCusUsername() + "        " + o.getResName()+ "        " + o.getOrderPrice() + "        " + o.getOrderType() + "        " + o.getAssignedRider());
+        }
     }
     public static void addNewRiderScreen(Admin a) throws IOException, InterruptedException{
 
