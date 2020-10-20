@@ -74,6 +74,7 @@ public class Admin extends User{
             while (riderQueueReader.hasNext()){
                 riderQueueObj.add(new Rider(riderQueueReader.nextLine()));
             }
+            riderQueueReader.close();
             return riderQueueObj;
         }
         else {
@@ -83,8 +84,21 @@ public class Admin extends User{
         }
     }
 
-    public static void setRiderQueue(MyQueue<Rider> newRiderQueue){ //change this to setting the file to the queue argument
-        riderQueue = newRiderQueue;
+    public static void setRiderQueue(MyQueue<Rider> newRiderQueue) throws IOException{ 
+        MyQueue<Rider> tempQueue = newRiderQueue;
+        
+        File riderQueueTxt = new File("Rider\\riderQueue.txt");
+        FileWriter riderQueueFileWriter = new FileWriter(riderQueueTxt, false);
+        PrintWriter riderQueuePrintWriter = new PrintWriter(riderQueueFileWriter);
+
+        StringBuilder source = new StringBuilder();
+
+        while (!tempQueue.isEmpty()){
+            source.append(tempQueue.poll().getUsername() + "\n");
+        }
+        riderQueuePrintWriter.print(source.toString());
+        riderQueueFileWriter.close();
+        riderQueuePrintWriter.close();
     }
 
     public static MyQueue<Order> getOrderQueue() throws IOException{
@@ -98,6 +112,7 @@ public class Admin extends User{
                 readerInput = orderQueueReader.nextLine();
                 orderQueueObj.add(new Order("Customer\\"+ readerInput.split("_")[0] + "\\" +readerInput));
             }
+            orderQueueReader.close();
             return orderQueueObj;
         }
         else {
@@ -106,8 +121,22 @@ public class Admin extends User{
             return new MyQueue<Order>();
         }
     }
-    public static void setOrderQueue(MyQueue<Order> newOrderQueue){ //change this to setting the file to the queue argument
-        orderQueue = newOrderQueue;
+    public static void setOrderQueue(MyQueue<Order> newOrderQueue) throws IOException { 
+        MyQueue<Order> tempQueue = newOrderQueue;
+        
+        File orderQueueTxt = new File("Rider\\orderQueue.txt");
+        FileWriter orderQueueFileWriter = new FileWriter(orderQueueTxt, false);
+        PrintWriter orderQueuePrintWriter = new PrintWriter(orderQueueFileWriter);
+
+        StringBuilder source = new StringBuilder();
+
+        while (!tempQueue.isEmpty()){
+            Order currOrder = tempQueue.poll();
+            source.append(currOrder.getCusUsername() + "_" + currOrder.getID() + "\n");
+        }
+        orderQueuePrintWriter.print(source.toString());
+        orderQueueFileWriter.close();
+        orderQueuePrintWriter.close();
     }
     public static void addToOrderQueue(Order newOrder){
         orderQueue.add(newOrder);

@@ -12,6 +12,24 @@ public class AdminUI {
 
     }
     
+    public static void deleteStringFromFile(File f, String deleteThis) throws IOException{
+		File temp = new File("temp.txt"); // make a temp file to copy all the other names to it.
+		PrintWriter moveToTemp = new PrintWriter(temp);
+		Scanner originalContents = new Scanner(f);
+		
+		while(originalContents.hasNext()){
+			String nextLine = originalContents.nextLine();
+			if(!nextLine.equals(deleteThis)){
+				moveToTemp.println(nextLine);
+			}
+		}
+		moveToTemp.close();
+		originalContents.close();
+		File tempName = f;
+		System.out.println(f.delete());
+		System.out.println(temp.renameTo(tempName)); 
+    }
+
     public static void loginScreen() throws IOException, InterruptedException{
         Scanner input = new Scanner(System.in);
         System.out.println("========================================================================");
@@ -19,13 +37,14 @@ public class AdminUI {
         System.out.println("========================================================================");
         String userAttempt = input.next();
         String passAttempt = input.next();
+
         //System.out.println(userAttempt); ///Debugging
         Admin a = new Admin(userAttempt, passAttempt);
         // System.out.println(c); //Debugging
         // System.out.println("Test " + c.getUsername()); //Debugging
         // System.out.println("Test " + c.getPassword()); //Debugging
         // System.out.println("Test " + passAttempt); //Debugging
-
+        //input.close();
         if (passAttempt.equals(a.getPassword())) {
             System.out.println("Login Successful. Welcome "+ a.getName()+"! ");
             mainScreen(a);
@@ -49,6 +68,8 @@ public class AdminUI {
         System.out.println("4. View combined order history");
         System.out.println("5. Sign out");
         int choice = input.nextInt();
+
+        //input.close();
         if (choice == 1) {
             viewRidersScreen(a);
         }
@@ -71,6 +92,7 @@ public class AdminUI {
             while (riderListReader.hasNext()){
                 riderList.add(new Rider(riderListReader.nextLine()));
             }
+            riderListReader.close();
         }
         else {
             File riderNamesTxt = new File("Rider\\riderList.txt");
@@ -92,6 +114,8 @@ public class AdminUI {
         System.out.println("2. Manage riders");
         System.out.println("3. Back to main menu");
         int choice = input.nextInt();
+
+        //input.close();
         if (choice == 1) {
             addNewRiderScreen(a);
         }
@@ -124,59 +148,64 @@ public class AdminUI {
             while (riderListReader.hasNext()){
                 riderList.add(new Rider(riderListReader.nextLine()));
             }
+            riderListReader.close();
         }
 
         Scanner input = new Scanner(System.in);
         
         System.out.println("========================================================================");
-        System.out.println("Please enter the rider's following information:  "); //(E.g. \"jack87 pass8362\") 
+        System.out.println("Please enter the rider's information:  "); //(E.g. \"jack87 pass8362\") 
         System.out.println("========================================================================");
         System.out.println("Desired username: (E.g. \"ryab12\") ");
         String usernameAttempt = input.nextLine();
-        if (riderList.contains(new Rider(usernameAttempt))) {
-            System.out.println("Error: Username already taken. Please try a different one. ");
-            addNewRiderScreen(a);
+        for (Rider r : riderList) {
+            if (r.getUsername() == usernameAttempt){
+                System.out.println("Error: Username already taken. Please try a different one. ");
+                addNewRiderScreen(a);
+            }
         }
-        else {
-            System.out.println("Desired password: (E.g. \"pass1234\")"); 
-            String passAttempt = input.nextLine();
-            System.out.println("Rider name: (E.g. \"Ryan Letourneau\")");
-            String nameAttempt = input.nextLine();
-            System.out.println("Phone number: (E.g. \"+60214723898\")"); 
-            String phoneAttempt = input.nextLine();
-            // System.out.println("Alternatively, enter \"BACK\" to go to the previous menu. ");
-            Rider rid = new Rider(usernameAttempt, passAttempt, nameAttempt, phoneAttempt);
-            riderList.add(rid);
 
-            File ridDir = new File("Rider/" + rid.getUsername());
-            ridDir.mkdir(); // make the directory using the Rider username
+        System.out.println("Desired password: (E.g. \"pass1234\")"); 
+        String passAttempt = input.nextLine();
+        System.out.println("Rider name: (E.g. \"Ryan Letourneau\")");
+        String nameAttempt = input.nextLine();
+        System.out.println("Phone number: (E.g. \"+60214723898\")"); 
+        String phoneAttempt = input.nextLine();
 
-            File ridOrderDir = new File("Rider\\" + rid.getUsername() + "\\Order\\");
-            ridOrderDir.mkdir();
+        //input.close();
+        // System.out.println("Alternatively, enter \"BACK\" to go to the previous menu. ");
+        Rider rid = new Rider(usernameAttempt, passAttempt, nameAttempt, phoneAttempt);
+        riderList.add(rid);
 
+        File ridDir = new File("Rider\\" + rid.getUsername());
+        ridDir.mkdir(); // make the directory using the Rider username
+
+        File ridOrderDir = new File("Rider\\" + rid.getUsername() + "\\Order\\");
+        ridOrderDir.mkdir();
+
+        
+        File orderQueueTxt = new File("Rider\\orderQueue.txt");
+        orderQueueTxt.createNewFile();
+
+        File riderQueueTxt = new File("Rider\\riderQueue.txt");
+        riderQueueTxt.createNewFile();
+        FileWriter ridQueueFileWriter = new FileWriter(riderQueueTxt, true);
+        PrintWriter ridQueuePrintWriter = new PrintWriter(ridQueueFileWriter);
+        ridQueuePrintWriter.println(rid.getUsername());
+        ridQueuePrintWriter.close();
+
+        File riderListTxt = new File("Rider\\riderList.txt");
+        riderListTxt.createNewFile();
+        FileWriter ridListFileWriter = new FileWriter(riderListTxt, true);
+        PrintWriter ridListPrintWriter = new PrintWriter(ridListFileWriter);
+        ridListPrintWriter.println(rid.getUsername());
+        ridListPrintWriter.close();
+
+        System.out.println("Rider successfully created."); 
+        Thread.sleep(2000);
+        viewRidersScreen(a);
             
-            File orderQueueTxt = new File("Rider\\orderQueue.txt");
-            orderQueueTxt.createNewFile();
-
-            File riderQueueTxt = new File("Rider\\riderQueue.txt");
-            riderQueueTxt.createNewFile();
-            FileWriter ridQueueFileWriter = new FileWriter(riderQueueTxt, true);
-            PrintWriter ridQueuePrintWriter = new PrintWriter(ridQueueFileWriter);
-            ridQueuePrintWriter.println(rid.getUsername());
-            ridQueuePrintWriter.close();
-
-            File riderListTxt = new File("Rider\\riderList.txt");
-            riderListTxt.createNewFile();
-            FileWriter ridListFileWriter = new FileWriter(riderListTxt, true);
-            PrintWriter ridListPrintWriter = new PrintWriter(ridListFileWriter);
-            ridListPrintWriter.println(rid.getUsername());
-            ridListPrintWriter.close();
-
-            System.out.println("Rider successfully created."); 
-            Thread.sleep(2000);
-            viewRidersScreen(a);
-            
-        }
+        
     }
     public static void manageRidersScreen1(Admin a) throws IOException, InterruptedException{
         ArrayList<Rider> riderList = new ArrayList<Rider>();
@@ -186,6 +215,7 @@ public class AdminUI {
             while (riderListReader.hasNext()){
                 riderList.add(new Rider(riderListReader.nextLine()));
             }
+            riderListReader.close();
         }
         else {
             File riderNamesTxt = new File("Rider\\riderList.txt");
@@ -204,6 +234,8 @@ public class AdminUI {
         }
         System.out.println(++counter + ") Back");
         int choice = input.nextInt();
+
+        //input.close();
         if (choice <= riderList.size() && choice > 0) {
             manageRidersScreen2(a, riderList.get(choice-1));
         }
@@ -227,10 +259,12 @@ public class AdminUI {
         System.out.println("1) Edit name");
         System.out.println("2) Edit password");
         System.out.println("3) Edit phone");
-        System.out.println("4) Delete rider");
-        System.out.println("5) Back");
+        //System.out.println("4) Delete rider");
+        System.out.println("4) Back");
 
         int choice = input.nextInt();
+
+        //input.close();
         if (choice == 1) {
             editRiderNameScreen(a, r);
         }
@@ -240,10 +274,10 @@ public class AdminUI {
         else if (choice == 3) {
             editRiderPhoneScreen(a, r);
         }
+        // else if (choice == 4) {
+        //     deleteRiderScreen(a, r);
+        // }
         else if (choice == 4) {
-            deleteRiderScreen(a, r);
-        }
-        else if (choice == 5) {
             viewRidersScreen(a);
         }
 
@@ -258,6 +292,7 @@ public class AdminUI {
         System.out.println("\nPlease enter the rider's new name: ");
         String newName = input.nextLine();
 
+        //input.close();
         r.setName(newName);
         File riderInfo = new File("Rider\\"+ r.getUsername() + "\\basicInfo.txt");
         Order.replaceLines(riderInfo, newName, 3);
@@ -281,6 +316,7 @@ public class AdminUI {
         System.out.println("\nPlease enter the rider's new password: ");
         String newPass = input.nextLine();
 
+        //input.close();
         r.setPassword(newPass);
         File riderInfo = new File("Rider\\"+ r.getUsername() + "\\basicInfo.txt");
         Order.replaceLines(riderInfo, newPass, 2);
@@ -297,6 +333,7 @@ public class AdminUI {
         System.out.println("\nPlease enter the rider's new phone number: ");
         String newPhone = input.nextLine();
 
+        //input.close();
         r.setPhoneNum(newPhone);
         File riderInfo = new File("Rider\\"+ r.getUsername() + "\\basicInfo.txt");
         Order.replaceLines(riderInfo, newPhone, 4);
@@ -317,45 +354,15 @@ public class AdminUI {
         System.out.println("Please enter Y/N");
         char choice = input.next().toCharArray()[0];
 
+        //input.close();
         if (choice == 'N') {
             manageRidersScreen2(a, r);
         }
         else if (choice == 'Y') {
-            ArrayList<Rider> riderList = new ArrayList<Rider>();
-            if (new File("Rider\\riderList.txt").exists()) {
-                File riderListTxt = new File("Rider\\riderList.txt");
-                Scanner riderListReader = new Scanner(riderListTxt);
-                while (riderListReader.hasNext()){
-                    riderList.add(new Rider(riderListReader.nextLine()));
-                }
-            }
-            riderList.remove(r);
-
-            StringBuilder source = new StringBuilder();
-            for (int i = 0; i < riderList.size(); i++) {
-                if (riderList.get(i) != null) {
-                source.append("\n" + riderList.get(i).getUsername());
-                }
-            }
-
-            File riderListTxt = new File("Rider\\riderList.txt");
-            riderListTxt.createNewFile();
-            FileWriter riderListFileWriter = new FileWriter(riderListTxt, false);
-            riderListFileWriter.write(source.toString());
-            riderListFileWriter.close();
-
-            File riderDirectory = new File("Rider\\"+ r.getUsername());
-            riderDirectory.delete();
+            deleteStringFromFile(new File("Rider\\riderList.txt"), r.getUsername());
+            deleteStringFromFile(new File("Rider\\riderQueue.txt"), r.getUsername());
+            System.out.println(new File("Rider\\" + r.getUsername()).delete());
             manageRidersScreen1(a);
         }
-        // else {
-        //     System.out.println("We encountered an error processing your request. Please try again later.");
-        //     Thread.sleep(2000);
-        //     manageRidersScreen2(a, r);
-        // }
     }
-
-    // public static void confirmDeleteRiderScreen(Admin a, Rider r) throws IOException, InterruptedException{
-
-    // }
 }
