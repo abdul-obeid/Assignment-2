@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class Restaurant extends User{
+public class Restaurant extends User implements Comparable<Restaurant>{
 	private String name; // Restaurant name
 	private Menu menu; // Restaurant's Menu
 	private String description; // Restaurant's description 
@@ -19,10 +19,16 @@ public class Restaurant extends User{
 		this.description = description;
 		this.address = address;
 		try{
+			File f = new File("Restaurant/" + name + "/Order/");
+			File[] files = f.listFiles();
+			this.orderCount = files.length - 1;
 			sendRestToFile(); // used to make a directory for the restaurant
 			menu = new Menu(name, restDir); // send Restaurant name and Directory file to make the menu
 		}
 		catch(IOException ex){
+			System.out.println("File or directory not found " + ex.getMessage());
+		}
+		catch(NullPointerException ex){
 			System.out.println("File or directory not found " + ex.getMessage());
 		}
 	}	
@@ -36,6 +42,7 @@ public class Restaurant extends User{
 		outputRestInfo.println(getPassword());
 		outputRestInfo.println(description);
 		outputRestInfo.println(address);
+		outputRestInfo.println(orderCount);
 		outputRestInfo.close(); // close basicInfo.txt file
 	}
 	public void setName(String name){
@@ -127,6 +134,11 @@ public class Restaurant extends User{
 	}
 	public void setOrderCount(int orderCount){
 		this.orderCount = orderCount;
+	}
+	
+	@Override
+	public int compareTo(Restaurant r){
+		return getOrderCount() - r.getOrderCount();
 	}
 
 	

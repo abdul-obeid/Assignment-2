@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class Rider extends User{
+public class Rider extends User implements Comparable<Rider>{
 	private String name;
 	private String phoneNumber;
 	private Order currentOrder;
@@ -79,6 +79,21 @@ public class Rider extends User{
 			currentOrderLabel = null;
 			currentOrder = null;
 			++deliveryCount;
+			MyQueue<Order> orderQueue = Admin.getOrderQueue();
+			if(orderQueue.isEmpty()){
+				MyQueue<Rider> riderQueue = Admin.getRiderQueue();
+				riderQueue.add(this);
+				Admin.setRiderQueue(riderQueue);
+			}
+			else{
+				Order.replaceOrderStatus(orderQueue.peek(), "Delivering");
+				this.setCurrentOrderLabel(orderQueue.peek().getCusUsername() + "_" +orderQueue.poll().getID());
+				Admin.setOrderQueue(orderQueue);
+
+			}
+
+
+			
 			sendRiderToFile();
 			
 		}
@@ -155,6 +170,12 @@ public class Rider extends User{
 	}
 	
 	public ArrayList<Order> getPastOrders(){
+		try{
+			readOrderHistoryFromFiles();
+		}
+		catch(IOException ex){
+			System.out.println("File not found" + ex.getMessage());
+		}
 		return pastOrders;
 	}
 	
@@ -162,17 +183,17 @@ public class Rider extends User{
 		this.pastOrders = pastOrders;
 	}
 	
-	// private void readOrderHistoryFromFiles() throws IOException{
-		// pastOrders.clear(); // clear the pastOrders to avoid redundant items
-		// File pastOrdersFileInput = new File(ridDir + "/Order/names.txt" );
-		// Scanner inputOrders = new Scanner(pastOrdersFileInput);
-		// while(inputOrders.hasNext()){
-			// File orderFile = new File(ridDir + "/Order/" + inputOrders.nextLine() + ".txt");
-			// Scanner OrderNameScanner = new Scanner(orderFile);
-			// pastOrders.add(new Order(orderFile));
-		// }
-		// inputOrders.close();
-	// }
+	private void readOrderHistoryFromFiles() throws IOException{
+		pastOrders.clear(); // clear the pastOrders to avoid redundant items
+		File pastOrdersFileInput = new File(ridDir + "/Order/names.txt" );
+		Scanner inputOrders = new Scanner(pastOrdersFileInput);
+		while(inputOrders.hasNext()){
+			File orderFile = new File(ridDir + "/Order/" + inputOrders.nextLine() + ".txt");
+			Scanner OrderNameScanner = new Scanner(orderFile);
+			pastOrders.add(new Order(orderFile));
+		}
+		inputOrders.close();
+	}
 	
 	public int getQueuePos(){
 		return queuePos;
@@ -200,5 +221,10 @@ public class Rider extends User{
 	@Override
 	public String toString(){
 		return "";
+	}
+	
+	@Override
+	public int compareTo(Rider r){
+		return getDeliveryCount() - r.getDeliveryCount();
 	}
 }

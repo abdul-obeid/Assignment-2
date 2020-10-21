@@ -3,6 +3,12 @@ import java.util.*;
 
 public class RestaurantUI{
 		static MyQueue<Rider> riderQueue = new MyQueue<>(); // temp
+		// try{
+			// static MyQueue<Rider> queue = Admin.getRiderQueue();
+		// }
+		// catch(IOException ex){
+			// System.out.println(ex.getMessage());
+		// }
 		
 	public static void  main(String[] args){
 		File allRestDir = new File("Restaurant");
@@ -10,11 +16,11 @@ public class RestaurantUI{
 		Restaurant[] restaurants = {new Restaurant ("Pizza Palace","0123456789", "0123456789", "Come home to true Italian Pizza at Pizza Palace, we offer a wide range of home-made Italian Pizzas alongside a menu complete with classic and rustic Italian dishes and a variety of cocktails.", "29 Jalan Riong, Bangsar, Kuala Lumpur, MY 59100"),
 									new Restaurant ("Mishaltit", "0123456789","0123456789", "Mishaltit restaurant is the best choice for Arabic & Western cuisine , Promises a value lifestyle proposition of great variety and quality food at affordable prices ", " 226 Jalan Ampang, Kuala Lumpur, MY 50450"),
 									new Restaurant ("Mamak Spot", "0123456789", "0123456789", "Mamak Station brings you the best in comfort food from the diverse street vendors of Malaysia. Our food is a celebration of flavors...layered from Chinese, Indian, and Malay roots.", "2 Jalan Robertson, G4 & G5, Idaman Robertson, Kuala Lumpur, MY 50150")};
-		
+		System.out.println(restaurants[0].getOrderCount());
 		setDefaultItems(restaurants);
-		riderQueue.add(new Rider("saber01","sub009","Saber","0113724413"));
-		riderQueue.add(new Rider("julio32","jul009","Julio","0114578665"));
-		selectRestaurant(restaurants);
+		// riderQueue.add(new Rider("saber01","sub009","Saber","0113724413"));
+		// riderQueue.add(new Rider("julio32","jul009","Julio","0114578665"));
+		// selectRestaurant(restaurants);
 		
 		
 		// try{
@@ -29,40 +35,40 @@ public class RestaurantUI{
 		
 	}
 	static void selectRestaurant(Restaurant[] restaurants){
-			Scanner scan = new Scanner(System.in);
-			do{
-				clearScreen();
-				System.out.println("\n\t\t\t   +----------------------------------------------------------------+");
-				System.out.println("\t\t\t   |\t\t\t\t\t\t\t\t    |\n   \t\t\t   |     ____           _                              _       \t    |");
-				System.out.println("\t\t\t   |\t|  _ \\ ___  ___| |_ __ _ _   _ _ __ __ _ _ __ | |_ ___ \t    |");
-				System.out.println("\t\t\t   |\t| |_) / _ \\/ __| __/ _` | | | | '__/ _` | '_ \\| __/ __|\t    |");
-				System.out.println("\t\t\t   |\t|  _ <  __/\\__ \\ || (_| | |_| | | | (_| | | | | |_\\__ \\\t    |");
-				System.out.println("\t\t\t   |\t|_| \\_\\___||___/\\__\\__,_|\\__,_|_|  \\__,_|_| |_|\\__|___/\t    |");
-				System.out.println("\t\t\t   |\t\t\t\t\t\t\t\t    |");
-				for(int i = 0; i < restaurants.length; ++i){
-					
-					System.out.print("\t\t\t   |\t\t\t" + (i+1) + ") " 
-										+ restaurants[i].getName() + "\t\t\t\t    |");
-					System.out.println();
-				}
-				System.out.print("\t\t\t   |\t\t\t\t\t\t\t\t    |");
+		Scanner scan = new Scanner(System.in);
+		do{
+			clearScreen();
+			System.out.println("\n\t\t\t   +----------------------------------------------------------------+");
+			System.out.println("\t\t\t   |\t\t\t\t\t\t\t\t    |\n   \t\t\t   |     ____           _                              _       \t    |");
+			System.out.println("\t\t\t   |\t|  _ \\ ___  ___| |_ __ _ _   _ _ __ __ _ _ __ | |_ ___ \t    |");
+			System.out.println("\t\t\t   |\t| |_) / _ \\/ __| __/ _` | | | | '__/ _` | '_ \\| __/ __|\t    |");
+			System.out.println("\t\t\t   |\t|  _ <  __/\\__ \\ || (_| | |_| | | | (_| | | | | |_\\__ \\\t    |");
+			System.out.println("\t\t\t   |\t|_| \\_\\___||___/\\__\\__,_|\\__,_|_|  \\__,_|_| |_|\\__|___/\t    |");
+			System.out.println("\t\t\t   |\t\t\t\t\t\t\t\t    |");
+			for(int i = 0; i < restaurants.length; ++i){
+				
+				System.out.print("\t\t\t   |\t\t\t" + (i+1) + ") " 
+									+ restaurants[i].getName() + "\t\t\t\t    |");
 				System.out.println();
-				System.out.print("\t\t\t\t\tSelect a restaurant by its number:");
-				try{
-					int choice = scan.nextInt();
-					if(choice >=1 && choice <= 3){
-						loginScreen(choice, restaurants);
-						break;
-					}
-					else
-						throw new InputMismatchException();
+			}
+			System.out.print("\t\t\t   |\t\t\t\t\t\t\t\t    |");
+			System.out.println();
+			System.out.print("\t\t\t\t\tSelect a restaurant by its number:");
+			try{
+				int choice = scan.nextInt();
+				if(choice >=1 && choice <= 3){
+					loginScreen(choice, restaurants);
+					break;
 				}
-				catch(InputMismatchException ex){
-					System.out.println("Wrong input, please try again!");
-					scan.nextLine();
-					loadingWait();
-				}
-			}while(true);
+				else
+					throw new InputMismatchException();
+			}
+			catch(InputMismatchException ex){
+				System.out.println("Wrong input, please try again!");
+				scan.nextLine();
+				loadingWait();
+			}
+		}while(true);
 	}
 	static void clearScreen() {
 		try{
@@ -97,15 +103,6 @@ public class RestaurantUI{
 				restaurants[0].getMenu().addItemToMenuDir(new Item("Chickenosaurus pizza", 20 ,"Roasted Chicken, Chicken Pepperoni and Mushroom Slices on our awesome Smoky Blended BBQ Sauce", "pastry"));
 				restaurants[0].getMenu().addItemToMenuDir(new Item("Ultimate Hawaiian pizza",23 ,"Loads of delicious roasted chicken, shredded chicken juicy pineapples and fresh mushrooms on our brand new pizza.", "pastry"));
 				restaurants[0].getMenu().addItemToMenuDir(new Item("Metasaurus pizza",27.0 ,"Generous portions of everyone's favorite beef pepperoni, ground beef and fresh mushrooms on our new blended smoky BBQ sauce","pastry"));
-				restaurants[0].getMenu().addItemToMenuDir(new Item("Smoky pepperoni mushroom pizza", 30 ,"Beef Pepperoni and Mushroom Slices on our awesome Smoky Blended BBQ Sauce","pastry"));
-				restaurants[0].getMenu().addItemToMenuDir(new Item("Simply cheese pizza", 24 ,"100% mozzarella cheese, Parmesan cheese & Oregano on our Signature Sauce.","pastry"));
-				restaurants[0].getMenu().addItemToMenuDir(new Item("Flaming tuna pizza",25 ,"Delicious tuna chunks, fresh onions topped with red-hot chilies! Get ready for a spicy encounter.","pastry"));
-				restaurants[0].getMenu().addItemToMenuDir(new Item("Blueberry Cheesecake",8 ,"A creamy cheesecake filled with a luscious, warm sauce.","Dessert"));
-				restaurants[0].getMenu().addItemToMenuDir(new Item("Chocolate Lava Cake",9 ,"Discover a lusciously melted soft chocolate centre, overflowing with chocolatey goodness","Dessert"));
-				restaurants[0].getMenu().addItemToMenuDir(new Item("7-Up",2 ,"soft drink","Drink"));
-				restaurants[0].getMenu().addItemToMenuDir(new Item("Pepsi",2 ,"soft drink","Drink"));
-				restaurants[0].getMenu().addItemToMenuDir(new Item("BBQ Baked Meatballs",8 ,"BBQ Baked Meatballs with BBQ sauce and bread","Sides"));
-				restaurants[0].getMenu().addItemToMenuDir(new Item("Garlic Cheese Onion Rings",7 ,"Thick-sliced, breaded whole sweet onion turn crisp and crunchy. Just the perfect sides!","Sides"));
 				restaurants[0].getMenu().copyItems();
 			}
 			if(restaurants[1].getMenu().getMenuContents().size() == 0){
@@ -113,33 +110,12 @@ public class RestaurantUI{
 				restaurants[1].getMenu().addItemToMenuDir(new Item("Foul Mudamas", 5,"mshed boiled fava beans with garli and lemon juice", "Appetizers"));
 				restaurants[1].getMenu().addItemToMenuDir(new Item("Labneh With Garlic", 5,"homemade yogurt mixed with mashed garlic", "Appetizers"));
 				restaurants[1].getMenu().addItemToMenuDir(new Item("Lemon Crush Juice",3 ,"orange, lemon, sugar, and ice", "Juice"));
-				restaurants[1].getMenu().addItemToMenuDir(new Item("Milk Cocktail",3 ,"milk, banana, honey, and ice.16oz", "Juice"));
-				restaurants[1].getMenu().addItemToMenuDir(new Item("Carrot Smoothie",3 ,"carrot, banana, honey, and ice.", "Juice"));
-				restaurants[1].getMenu().addItemToMenuDir(new Item("Shawarma",12 ,"beef and lamb marinated with our special spices", "Main Entrees"));
-				restaurants[1].getMenu().addItemToMenuDir(new Item("Fried Chicken",11 ,"Chicken deep fried with cheese and chili sauce", "Main Entrees"));
-				restaurants[1].getMenu().addItemToMenuDir(new Item("Chicken Kafta",15 ,"ground chicken with onions and parsley", "Main Entrees"));
-				restaurants[1].getMenu().addItemToMenuDir(new Item("Seafood Fried Fish",18 ,"whole white boned fish fried with sesame sauce, served with fries or rice", "Main Entrees"));
-				restaurants[1].getMenu().addItemToMenuDir(new Item("Grilled Chicken",19 ,"marinated and served with fries or rice and salad", "Main Entrees"));
-				restaurants[1].getMenu().addItemToMenuDir(new Item("Lebanese Salad",8 ,"lettuce, tomatoes, parsley, radishs, and cucumber", "Salad"));
-				restaurants[1].getMenu().addItemToMenuDir(new Item("Fattoush",9 ,"lebanese salad with fried pita bread", "Salad"));
 				restaurants[1].getMenu().copyItems();
 			}
 			if(restaurants[2].getMenu().getMenuContents().size() == 0){
 				restaurants[2].getMenu().addItemToMenuDir(new Item("Roti Canai",4 ,"crispy Indian flatbread w. curry dipping sauce", "Starters"));
 				restaurants[2].getMenu().addItemToMenuDir(new Item("Salt & Pepper Chicken Wings",7 ,"crispy fried chicken wings", "Starters"));
 				restaurants[2].getMenu().addItemToMenuDir(new Item("Curry Puff Pastry",6 ,"homemade pastry w. curry chicken, onions & potato", "Starters"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Bak Kut Teh",12 ,"intensely flavorful herb soup w. spareribs, mushroom & tofu", "Soup & Porridge"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Mustard Green Fish Fillet Soup",11 ,"mustard green w. fish fillet in a clear broth", "Soup & Porridge"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Westlake Beef Soup",10 ,"minced beef egg drop soup", "Soup & Porridge"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Seafood Pan Fried Noodles",14 ,"double pan fried egg noodles w. shrimp, squid, scallop & fish cake", "Noodles"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Hainanese Chicken Loh Mee",10 ,"egg noodles toss in dark soy sauce, w. hainanese chicken", "Noodles"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Fish Fillet Mee Fun",11 ,"popular KL fish head rice vermicelli noodles", "Noodles"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Nasi Lemak",10 ,"fragrant coconut rice w. sambal, anchovies & egg - choice of chicken or spareribs", "Rice"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Hainanese Chicken",8 ,"slowly simmered bone-in chicken w. fragrant rice, served w. ginger chili sauce", "Rice"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Fried Rice",9,"chicken wok fried rice", "Rice"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Kari Ayam",13,"classic Malaysian chicken curry w. potatoes", "Entrees"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Fresh Garlic Romaine Lettuce",11,"wok toss fresh garlic romaine greens", "Entrees"));
-				restaurants[2].getMenu().addItemToMenuDir(new Item("Eggplant Salted Fish & Chicken",15,"braised eggplant w. salted fish & tender chicken", "Entrees"));
 				restaurants[2].getMenu().copyItems();
 			}
 		}catch(IOException ex){
@@ -265,8 +241,7 @@ public class RestaurantUI{
 			System.out.println();
 			System.out.println();
 			for(int i = 0; i < restaurant.getCurrentOrders().size(); ++i){
-				// if(!restaurant.getCurrentOrder().get(i).getOrderStatus().equals("Collected") && !restaurant.getPastOrders().get(i).getOrderStatus().equals("Delivered"))
-					System.out.println("\t\t " + (i+1) +"# " + restaurant.getCurrentOrders().get(i));
+				System.out.println("\t\t " + (i+1) +"# " + restaurant.getCurrentOrders().get(i));
 			}
 			System.out.print("\n\n\t\t" + "choose number of order to show or update: ");
 			int choosenOrder = (scan.nextInt() - 1);
@@ -286,11 +261,12 @@ public class RestaurantUI{
 					System.out.println("|");
 				}
 				System.out.println("|\tTotal Price: RM" + restaurant.getCurrentOrders().get(choosenOrder).getOrderPrice());
-				System.out.println("|\n|\t1) Update Order Status ");
-				System.out.println("|\t2) Back to Restaurant Dashboard ");
+				System.out.println("|\n|\t1) Back to Restaurant Dashboard ");
+				if(!restaurant.getCurrentOrders().get(choosenOrder).getOrderStatus().equals("Delivering") && !(restaurant.getCurrentOrders().get(choosenOrder).getOrderStatus().equals("Ready") && restaurant.getCurrentOrders().get(choosenOrder).getOrderType().equals("Delivery")))
+					System.out.println("|\t2) Update Order Status ");
 				System.out.print("|\t>>");
 				int choosenAction = scan.nextInt();
-				if(choosenAction == 1){
+				if(choosenAction == 2){
 					if(restaurant.getCurrentOrders().get(choosenOrder).getOrderType().equals("Collection")){
 						System.out.println("|\n|\n|\t1)Change to Ready ");
 						System.out.println("|\t2)Change to Collected ");
@@ -308,6 +284,7 @@ public class RestaurantUI{
 						else if(newStatus == 2){
 							try{
 								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Collected");
+								break;
 								// customer.getCurrentOrder().setOrderStatus("Ready");
 							}
 							catch(IOException ex){
@@ -318,23 +295,22 @@ public class RestaurantUI{
 							throw new InputMismatchException();
 					}
 					else{
-						System.out.println("|\n|\n|\t1)Change to Ready ");
-						System.out.println("|\n|\n|\t2)Change to Delivering ");
+						System.out.println("|\n|\n|\t1)Change to Ready (if there is a dirver available, it will change to Delivering right away.)");
 						int newStatus = scan.nextInt();
 						if(newStatus == 1){
 							try{
-								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Ready");
-								// customer.getCurrentOrder().setOrderStatus("Ready");
-							}
-							catch(IOException ex){
-								System.out.println(ex.getMessage());
-							}
-						}
-						else if(newStatus == 2){
-							try{
-								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Delivering");
-								riderQueue.poll().setCurrentOrderLabel(restaurant.getCurrentOrders().get(choosenOrder).getCusUsername() + "_" + restaurant.getCurrentOrders().get(choosenOrder).getID());
-								// customer.getCurrentOrder().setOrderStatus("Ready");
+								MyQueue<Rider> riderQueue = Admin.getRiderQueue();
+								if(!riderQueue.isEmpty()){
+									restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Delivering");
+									riderQueue.poll().setCurrentOrderLabel(restaurant.getCurrentOrders().get(choosenOrder).getCusUsername() + "_" + restaurant.getCurrentOrders().get(choosenOrder).getID());
+									Admin.setRiderQueue(riderQueue);
+								}
+								else{
+									restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Ready");
+									MyQueue<Order> orderQueue = Admin.getOrderQueue();
+									orderQueue.add(restaurant.getCurrentOrders().get(choosenOrder));
+									Admin.setOrderQueue(orderQueue);
+								}
 							}
 							catch(IOException ex){
 								System.out.println(ex.getMessage());
@@ -344,7 +320,7 @@ public class RestaurantUI{
 							throw new InputMismatchException();
 					}
 				}
-				else if(choosenAction == 2){
+				else if(choosenAction == 1){
 					break;
 				}
 				else

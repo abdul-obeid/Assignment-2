@@ -129,14 +129,21 @@ public class Menu{
 		Scanner scan = new Scanner(System.in);
 		do{
 			RestaurantUI.clearScreen();
-			System.out.println("\n\n\t\t\t\t+------------------------------------------------+");
-			System.out.println("\t\t\t\t| \t\t\t\t\t\t |");
-			System.out.println("\t\t\t\t|\t  Select item to view or update: \t |");
-			System.out.println("\t\t\t\t| \t\t\t\t\t\t |");
+			System.out.println("\n\n\t\t\t\t+----------------------------------------------------------------+");
+			System.out.println("\t\t\t\t| \t\t\t\t\t\t\t\t |");
+			System.out.println("\t\t\t\t|\t\t  Select item to view or update: \t\t |");
+			System.out.println("\t\t\t\t| \t\t\t\t\t\t\t\t |");
+			System.out.println("\t\t\t\t+----------------------------------------------------------------+");
+			System.out.print("\t\t\t\t|");
+			System.out.printf("%-5s %-30s %-6s %-5s", " No. |", "Item name", "|  ID ", " | Price");
+    		System.out.println("\t\t |\n\t\t\t\t+----------------------------------------------------------------+");
 			int numberOfItems;
 			for(numberOfItems  = 0; numberOfItems < menuContents.size(); ++numberOfItems){
-				System.out.println("\t\t\t\t| " + (numberOfItems + 1) + ") " + menuContents.get(numberOfItems).getItemName() );
+				System.out.print("\t\t\t\t|");
+				System.out.printf("%-6s %-33s %-6d %-5.2f %11s %n", ("  "+ (numberOfItems + 1)), menuContents.get(numberOfItems).getItemName(), menuContents.get(numberOfItems).getItemID(), menuContents.get(numberOfItems).getItemPrice(),"|");
+				// System.out.println("\t\t\t\t| " + (numberOfItems + 1) + "| " + menuContents.get(numberOfItems).getItemName() );
 			}
+			System.out.println("\t\t\t\t+----------------------------------------------------------------+");
 			System.out.println("\t\t\t\t| " + (numberOfItems + 1) + ") " + "Back to main menu");
 			System.out.print("\n\n\t\t\t\tEnter number of item: ");
 			try{
@@ -200,10 +207,10 @@ public class Menu{
 			System.out.println("\t\t\t\t| |_| | |_) | (_| | (_| | ||  __/  | || ||  __/ | | | | |");
 			System.out.println("\t\t\t\t \\___/| .__/ \\__,_|\\__,_|\\__\\___| |___|\\__\\___|_| |_| |_|");
 			System.out.println("\t\t\t\t      |_|                                                ");
-			System.out.println("\n\t\t\t\t1)Description");
-			System.out.println("\t\t\t\t2)Price");
-			System.out.println("\t\t\t\t3)Type");
-			System.out.println("\t\t\t\t4)Availability");
+			System.out.println("\n\t\t\t\t1)Description: " + updatedItem.getItemDescription());
+			System.out.println("\t\t\t\t2)Price: RM" + updatedItem.getItemPrice());
+			System.out.println("\t\t\t\t3)Type: " + updatedItem.getItemType());
+			System.out.println("\t\t\t\t4)Availability: "  + updatedItem.getAvailability());
 			System.out.println("\t\t\t\t5)confirm changes and go back");
 			System.out.print("\t\t\t\tSelect number of attribute to change, then press 5 to confirm: ");
 			choosenAttribute = scan.nextInt(); 

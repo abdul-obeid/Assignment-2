@@ -4,7 +4,7 @@ public class RiderUI{
 	public static void  main(String[] args){
 		File allRidersDir = new File("Rider");
 		allRidersDir.mkdir();
-		Rider r = new Rider("saber01","sub009","Saber","0113724413");
+		// Rider r = new Rider("saber01","sub009","Saber","0113724413");
 		loginScreen();
 		
 	}
@@ -86,7 +86,12 @@ public class RiderUI{
 				System.out.println(rider.getQueuePos());
 			}
 			else if(dashCohice == 3){
-				
+				for(int i = 0; i < rider.getPastOrders().size(); ++i){
+					System.out.println(rider.getPastOrders().get(i));
+				}
+				System.out.println("Press Enter to go back");
+				scan.nextLine();
+				scan.nextLine();
 			}
 			else if(dashCohice == 4){
 				break;
@@ -101,6 +106,7 @@ public class RiderUI{
 			System.out.println("+----------------------------------------------------+");
 			System.out.println("|\tOrder ID: " + rider.getCurrentOrder().getID());
 			System.out.println("|\tCustomer Username: " + rider.getCurrentOrder().getCusUsername());
+			System.out.println("|\tDelivery Address: " + rider.getCurrentOrder().getDelAddress());
 			System.out.println("|\tTime Requested: " + rider.getCurrentOrder().getTimeRequested());
 			System.out.println("|\tOrder Status: " + rider.getCurrentOrder().getOrderStatus());
 			System.out.println("|\tOrder Contents: " );
