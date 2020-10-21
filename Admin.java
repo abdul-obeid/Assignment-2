@@ -110,7 +110,7 @@ public class Admin extends User{
             String readerInput;
             while (orderQueueReader.hasNext()){
                 readerInput = orderQueueReader.nextLine();
-                orderQueueObj.add(new Order("Customer\\"+ readerInput.split("_")[0] + "\\" +readerInput));
+                orderQueueObj.add(new Order("Customer\\"+ readerInput.split("_")[0] + "\\" +readerInput+".txt"));
             }
             orderQueueReader.close();
             return orderQueueObj;
