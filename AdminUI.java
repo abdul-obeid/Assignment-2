@@ -107,6 +107,8 @@ public class AdminUI {
 		    riderNamesTxt.createNewFile();
         }
 
+        Collections.sort(riderList, Collections.reverseOrder());
+
         Scanner input = new Scanner(System.in);
         System.out.println("========================================================================");
         System.out.println("Riders: ");
@@ -147,7 +149,7 @@ public class AdminUI {
         resList.add(new Restaurant ("Mishaltit", "0123456789","0123456789", "Mishaltit restaurant is the best choice for Arabic & Western cuisine , Promises a value lifestyle proposition of great variety and quality food at affordable prices ", " 226 Jalan Ampang, Kuala Lumpur, MY 50450"));
         resList.add(new Restaurant ("Mamak Spot", "0123456789", "0123456789", "Mamak Station brings you the best in comfort food from the diverse street vendors of Malaysia. Our food is a celebration of flavors...layered from Chinese, Indian, and Malay roots.", "2 Jalan Robertson, G4 & G5, Idaman Robertson, Kuala Lumpur, MY 50150"));
         
-        Collections.sort(resList);
+        Collections.sort(resList, Collections.reverseOrder());
         // ArrayList<Integer> resOrderCounts = new ArrayList<Integer>();
         // for (int i = 0; i < resList.size(); i++) {
         //     File [] orderPaths = new File("Restaurant\\"+ resList.get(i).getUsername()+ "\\Order").listFiles();
@@ -188,7 +190,7 @@ public class AdminUI {
         //     cusOrderCounts.add(orderPaths.length);
         // }
 
-        Collections.sort(cusList);
+        Collections.sort(cusList, Collections.reverseOrder());
         System.out.println("====================================================================");
         System.out.println("Customers: ");
         System.out.println("====================================================================");
@@ -299,6 +301,8 @@ public class AdminUI {
             File riderNamesTxt = new File("Rider\\riderList.txt");
 		    riderNamesTxt.createNewFile();
         }
+
+        Collections.sort(riderList, Collections.reverseOrder());
 
         Scanner input = new Scanner(System.in);
         System.out.println("========================================================================");
