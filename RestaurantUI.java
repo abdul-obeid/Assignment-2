@@ -16,11 +16,11 @@ public class RestaurantUI{
 		Restaurant[] restaurants = {new Restaurant ("Pizza Palace","0123456789", "0123456789", "Come home to true Italian Pizza at Pizza Palace, we offer a wide range of home-made Italian Pizzas alongside a menu complete with classic and rustic Italian dishes and a variety of cocktails.", "29 Jalan Riong, Bangsar, Kuala Lumpur, MY 59100"),
 									new Restaurant ("Mishaltit", "0123456789","0123456789", "Mishaltit restaurant is the best choice for Arabic & Western cuisine , Promises a value lifestyle proposition of great variety and quality food at affordable prices ", " 226 Jalan Ampang, Kuala Lumpur, MY 50450"),
 									new Restaurant ("Mamak Spot", "0123456789", "0123456789", "Mamak Station brings you the best in comfort food from the diverse street vendors of Malaysia. Our food is a celebration of flavors...layered from Chinese, Indian, and Malay roots.", "2 Jalan Robertson, G4 & G5, Idaman Robertson, Kuala Lumpur, MY 50150")};
-		System.out.println(restaurants[0].getOrderCount());
+		// System.out.println(restaurants[0].getOrderCount());
 		setDefaultItems(restaurants);
 		// riderQueue.add(new Rider("saber01","sub009","Saber","0113724413"));
 		// riderQueue.add(new Rider("julio32","jul009","Julio","0114578665"));
-		// selectRestaurant(restaurants);
+		selectRestaurant(restaurants);
 		
 		
 		// try{

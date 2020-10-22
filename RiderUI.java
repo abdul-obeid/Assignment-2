@@ -83,11 +83,17 @@ public class RiderUI{
 				checkCurrentOrder(rider);
 			}
 			else if(dashCohice == 2){
-				System.out.println(rider.getQueuePos());
+				if(rider.getQueuePos() < 0)
+					System.out.println("\n\t\t\t You aren't in the rider queue in the mean time, deliver your current order to enter it again.");
+				else if(rider.getQueuePos() == 0)
+					System.out.println("\n\t\t\t\t You are first in line! please stay tuned, you will receive the very next order!");
+				else{
+					System.out.println("\n\t\t\t\t there is " + rider.getQueuePos() + " rider/s in front of you, please wait" );
+				}
 			}
 			else if(dashCohice == 3){
 				for(int i = 0; i < rider.getPastOrders().size(); ++i){
-					System.out.println(rider.getPastOrders().get(i));
+					System.out.println(rider.getPastOrders().get(i) + ", Address: " + rider.getPastOrders().get(i).getDelAddress());
 				}
 				System.out.println("Press Enter to go back");
 				scan.nextLine();

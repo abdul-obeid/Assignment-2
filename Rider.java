@@ -185,6 +185,8 @@ public class Rider extends User implements Comparable<Rider>{
 	
 	private void readOrderHistoryFromFiles() throws IOException{
 		pastOrders.clear(); // clear the pastOrders to avoid redundant items
+		ridDir = new File("Rider/" + getUsername());
+		ridDir.mkdir(); // make the directory using the Rider usernamename
 		File pastOrdersFileInput = new File(ridDir + "/Order/names.txt" );
 		Scanner inputOrders = new Scanner(pastOrdersFileInput);
 		while(inputOrders.hasNext()){
@@ -196,7 +198,18 @@ public class Rider extends User implements Comparable<Rider>{
 	}
 	
 	public int getQueuePos(){
-		return queuePos;
+		try{
+			MyQueue<Rider> extractRiderQueue = Admin.getRiderQueue();
+			int startingSize = extractRiderQueue.size();
+			for(int i = 0; i < startingSize; ++i){
+				if(this.getUsername().equals(extractRiderQueue.poll().getUsername()))
+					return i;
+			}
+		}
+		catch(IOException ex){
+			System.out.println(ex.getMessage());
+		}
+		return -1;
 	}
 	
 	public void setQueuePos(int queuePos){
