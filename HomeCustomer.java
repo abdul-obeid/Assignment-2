@@ -399,6 +399,7 @@ public class HomeCustomer {
         if (choice == 1) {
             Order o = c.createNewOrder(r, crt, "Collection", c.getAddress());
             c.addToCurrentOrder(o);
+            c.increaseOrderCount();
             System.out.println("Current order: " + c.getCurrentOrder()); /////////Debugging
             r.addToCurrentOrders(o);
             System.out.println("Order successfully created.");
@@ -425,6 +426,7 @@ public class HomeCustomer {
             String inputAddress = addressIn.nextLine();
             Order o = c.createNewOrder(r, crt, "Delivery", inputAddress);
             c.addToCurrentOrder(o);
+            c.increaseOrderCount();
             System.out.println("Current order: " + c.getCurrentOrder()); /////////Debugging
             r.addToCurrentOrders(o);
             System.out.println("Order successfully created.");

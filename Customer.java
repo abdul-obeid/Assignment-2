@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Customer extends User {
+public class Customer extends User implements Comparable<Customer>{
     private String name;
     // private String username;
     // private String password;
@@ -93,6 +93,11 @@ public class Customer extends User {
     public void setOrderCount(int newCount) {
         this.orderCount = newCount;
     }
+    public void increaseOrderCount() throws IOException {
+        this.orderCount = orderCount + 1;
+        File cusFile = new File("Customer\\"+getUsername()+"\\info.txt");
+        Order.replaceLines(cusFile, String.valueOf(orderCount), 5);
+    }
     public String getAddress() {
         return this.homeAddress;
     }
@@ -100,6 +105,12 @@ public class Customer extends User {
         this.homeAddress = newAddress;
     }
 
+
+    @Override
+	public int compareTo(Customer c){
+		return this.getOrderCount() - c.getOrderCount();
+    }
+    
     @Override
     public String toString() {
         return ("Customer name: " + this.name + ". Username: " + this.getUsername()+". ");
