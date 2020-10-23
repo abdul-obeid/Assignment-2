@@ -1,7 +1,7 @@
 1
 jack87
 Pizza Palace
-Delivered
+Preparing
 43.0
 Delivery
 55 Place St., Malaysia
@@ -15,4 +15,3 @@ Ultimate Hawaiian pizza
 Loads of delicious roasted chicken, shredded chicken juicy pineapples and fresh mushrooms on our brand new pizza.
 pastry
 2
-

@@ -29,11 +29,13 @@ public class Customer extends User implements Comparable<Customer>{
     public Customer() {
         super(null, null);
     }
+
     // public Customer(String newName, String newUsername, String newPassword) throws IOException{ //Constructor used for registration
     //     super(newUsername, newPassword);
     //     this.name = newName;
     //     createCusFile(newName, newUsername, newPassword);
     // }
+    
     public Customer(String newName, String newUsername, String newPassword, String newAddress) throws IOException{ //Constructor used for registration
         super(newUsername, newPassword);
         this.name = newName;
@@ -47,7 +49,7 @@ public class Customer extends User implements Comparable<Customer>{
         this.setUsername(cusInfo.nextLine());
         this.setPassword(cusInfo.nextLine());
         this.setAddress(cusInfo.nextLine());
-        this.setOrderCount(Integer.parseInt(cusInfo.nextLine())); // This line is kinda sus
+        this.setOrderCount(Integer.parseInt(cusInfo.nextLine())); 
 
         Scanner orderNameTxt = new Scanner(new File("Customer\\"+cusUsername+"\\Order\\names.txt"));    // Reading order information to create pastOrders
         while (orderNameTxt.hasNext()) {
@@ -75,7 +77,7 @@ public class Customer extends User implements Comparable<Customer>{
     public void setName(String newName) {
         this.name = newName;
     }
-    public ArrayList<Order> getCurrentOrder() {     // Changed from Order to Arraylist <---------- SUS
+    public ArrayList<Order> getCurrentOrder() {     
         return this.currentOrders;
     }
     public void setCurrentOrder(ArrayList<Order> newOrder) {

@@ -296,7 +296,7 @@ public class Order {
     }
 
     public String toStringHistory() {
-        StringBuffer or = new StringBuffer("OrderID: " + orderID +". Ordered by " + cusUsername + " from restaurant " + resName + ". ");
+        StringBuffer or = new StringBuffer("OrderID: " + orderID +". Ordered by " + cusUsername + " from restaurant " + resName + ". Status: " + orderStatus + ".");
         or.append("\nContents: ");
         for (Item i: this.getOrderContents()) {
             or.append(i.toString() + "\n");

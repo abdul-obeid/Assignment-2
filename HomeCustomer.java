@@ -140,12 +140,12 @@ public class HomeCustomer {
         if (choice != "BACK") {
             String userCreateAttempt = choice;
             try {
-                if ( new File("Customer\\" + userCreateAttempt + "\\").exists()) {
+                if ( new File("Customer\\" + userCreateAttempt + "\\").exists()) {              //Checks if username already exists
                     clearScreen();
                     System.out.println("Error: Username already taken. Please try another one.");
                     customerRegisterScreen();
                 }
-                else if (userCreateAttempt.contains("_")) {
+                else if (userCreateAttempt.contains("_")) {                         //Checks if username contains illegal character _
                     clearScreen();
                     System.out.println("Error: Username cannot contain an underscore \"_\". Please try again.");
                     customerRegisterScreen();
@@ -172,7 +172,7 @@ public class HomeCustomer {
                     String addressCreateAttempt = input.nextLine();
 
 
-                    Customer c = new Customer(nameCreateAttempt, userCreateAttempt, passCreateAttempt, addressCreateAttempt);
+                    Customer c = new Customer(nameCreateAttempt, userCreateAttempt, passCreateAttempt, addressCreateAttempt);       //Constructs new Customer, including files and directory
                     customerStartMenu();
                 }
             } catch (IOException e) {
@@ -225,7 +225,7 @@ public class HomeCustomer {
         clearScreen();
         Scanner input = new Scanner(System.in);
         
-        Cart crt = new Cart();  ////////////
+        Cart crt = new Cart();  
 
         System.out.println("========================================================================");
         System.out.println("Please enter the number corresponding with your desired option: ");
@@ -235,9 +235,9 @@ public class HomeCustomer {
         System.out.println("4. Back to previous menu ");
         System.out.println("========================================================================");
 
-        int choice = input.nextInt();
+        int choice = input.nextInt();                               //Constructs Restaurant object for selected restaurant, and passes it to next menu screen
         if (choice == 1) {
-            Restaurant r = new Restaurant ("Pizza Palace","pizzaPalace01", "0123456789",
+            Restaurant r = new Restaurant ("Pizza Palace","pizzaPalace01", "0123456789",        
              "Come home to true Italian Pizza at Pizza Palace, we offer a wide range of home-made Italian Pizzas alongside a menu complete with classic and rustic Italian dishes and a variety of cocktails.", "29 Jalan Riong, Bangsar, Kuala Lumpur, MY 59100");
             customerViewRestaurantMenu(c, r, crt);
         }
@@ -264,7 +264,7 @@ public class HomeCustomer {
         input.next();
         customerMainMenu(c);
         }
-        else if (!c.getCurrentOrder().isEmpty()){
+        else if (!c.getCurrentOrder().isEmpty()){                   //Retrieves list of active orders, and prints order information
             for (int i = 0; i < c.getCurrentOrder().size(); i++){
             System.out.println("========================================================================");
             System.out.println("Active Orders: ");
@@ -304,17 +304,17 @@ public class HomeCustomer {
 
     public void customerOrderHistoryMenu(Customer c) throws IOException, InterruptedException{
         clearScreen();
-        File cusOrders = new File("Customer\\" + c.getUsername() + "\\Order\\names.txt");
+        File cusOrders = new File("Customer\\" + c.getUsername() + "\\Order\\names.txt");               //Reads in all customer order names
         Scanner cusOrdersReader = new Scanner(cusOrders);
         
         System.out.println("========================================================================");
         System.out.println("\nPast Orders: ");
         System.out.println("\n"); 
         System.out.println("========================================================================");
-        while (cusOrdersReader.hasNext()){
-            Order o = new Order("Customer\\" + c.getUsername() + "\\Order\\" + cusOrdersReader.nextLine() + ".txt");
+        while (cusOrdersReader.hasNext()){                                                                      
+            Order o = new Order("Customer\\" + c.getUsername() + "\\Order\\" + cusOrdersReader.nextLine() + ".txt");        //Constructs orders from stored files using the previously retrieved order names
             System.out.println("\n__________________________");
-            System.out.println(o.toStringHistory());
+            System.out.println(o.toStringHistory());                    //Prints out order information
             System.out.println("__________________________\n");
         }
         System.out.println("========================================================================");
@@ -339,7 +339,11 @@ public class HomeCustomer {
         System.out.println("Select items to add to shopping cart");
 
         int menuChoices = 1;
-        for (Item i : r.getMenu().getMenuContents()){
+        ArrayList<Item> menuContents = r.getMenu().getMenuContents();
+
+        //Collections.sort(menuContents, new comp); // ITEM COMPARATOR GOES HERE!!!!!!!!!
+
+        for (Item i : menuContents){
             System.out.println(menuChoices + ". " + i.getItemName()+"        "+i.getItemType()+"        "+i.getItemPrice());
             menuChoices++;
         }
@@ -350,7 +354,7 @@ public class HomeCustomer {
         Scanner input = new Scanner(System.in);
         int choice = input.nextInt();
         if (choice <= (menuChoices-2)){
-            crt.addSelectedItem(r.getMenu().getMenuContents().get(choice-1));
+            crt.addSelectedItem(menuContents.get(choice-1));
             clearScreen();
             System.out.println("Item added.");
             Thread.sleep(500);
@@ -380,7 +384,7 @@ public class HomeCustomer {
                       +"\n\nContents:"); 
 
         for (int i = 0; i< crt.getChosenItems().size(); i++){
-            System.out.println(crt.getChosenItems().get(i).getItemName() + "           " + (crt.getChosenItems().get(i)).getItemPrice()+" RM.");
+            System.out.println(crt.getChosenItems().get(i).getItemName() + "           " + (crt.getChosenItems().get(i)).getItemPrice()+" RM.");    //Prints out items in cart
             
         }
         System.out.println("\n");
@@ -397,10 +401,10 @@ public class HomeCustomer {
         int choice = input.nextInt();
 
         if (choice == 1) {
-            Order o = c.createNewOrder(r, crt, "Collection", c.getAddress());
+            Order o = c.createNewOrder(r, crt, "Collection", c.getAddress());       //Creates order file with collection delivery type
             c.addToCurrentOrder(o);
             c.increaseOrderCount();
-            System.out.println("Current order: " + c.getCurrentOrder()); /////////Debugging
+            //System.out.println("Current order: " + c.getCurrentOrder()); /////////Debugging
             r.addToCurrentOrders(o);
             System.out.println("Order successfully created.");
 
@@ -411,11 +415,6 @@ public class HomeCustomer {
 
             customerMainMenu(c);
         }
-        // else if (choice == 1 && (c.getCurrentOrder()!=null)){
-        //     System.out.println("Error: Customers are limited to 1 active order at a time.");
-        //     Thread.sleep(2000);
-        //     customerViewCartMenu(c, r, crt);
-        // }
         else if (choice == 2) {
             Scanner addressIn = new Scanner(System.in);
             clearScreen();
@@ -424,10 +423,10 @@ public class HomeCustomer {
             System.out.println("Please enter your delivery address:");
             System.out.println("========================================================================");
             String inputAddress = addressIn.nextLine();
-            Order o = c.createNewOrder(r, crt, "Delivery", inputAddress);
+            Order o = c.createNewOrder(r, crt, "Delivery", inputAddress);           //Creates order file with "delivery" delivery type
             c.addToCurrentOrder(o);
             c.increaseOrderCount();
-            System.out.println("Current order: " + c.getCurrentOrder()); /////////Debugging
+            //System.out.println("Current order: " + c.getCurrentOrder()); /////////Debugging
             r.addToCurrentOrders(o);
             System.out.println("Order successfully created.");
             Thread.sleep(1000);

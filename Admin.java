@@ -1,18 +1,18 @@
 import java.util.*;
 import java.io.*;
 
-public class Admin extends User{
-    private String name;
-    private ArrayList<Order> pastOrders = new ArrayList<Order>();
-    private static MyQueue<Rider> riderQueue= new MyQueue<Rider>();
-    private static MyQueue<Order> orderQueue= new MyQueue<Order>();
-    private File adminDir;
+public class Admin extends User{            //This class stores admin user information for login
+    private String name;                    //Admin name
+    private ArrayList<Order> pastOrders = new ArrayList<Order>();   //Combined list of all orders made on the platform
+    private static MyQueue<Rider> riderQueue= new MyQueue<Rider>(); //Globally used rider queue (used for determining delivery order)
+    private static MyQueue<Order> orderQueue= new MyQueue<Order>(); //Globally used order queue (used for determining delivery order)
+    private File adminDir;          //Directory where admin information is stored
 
-    Admin() {
+    Admin() {           //Default constructor (not used)
         super(null,null);
     }
 
-    Admin(String username, String password) throws IOException{
+    Admin(String username, String password) throws IOException{ // Constructor used for login
         super(username, password);
         // this.name = name;
         Scanner adminInfo = new Scanner(new File("Admin\\"+ username + "\\info.txt"));  // Reading customer information from info.txt
@@ -20,6 +20,7 @@ public class Admin extends User{
         this.setPassword(adminInfo.nextLine());
         this.setName(adminInfo.nextLine());
 
+        // Reading all order history information into pastOrders, goes through each restaurant directory
         Scanner mishaltitOrderNameTxt = new Scanner(new File("Restaurant\\Mishaltit\\Order\\names.txt"));    // Reading order information to create pastOrders
         Scanner pizzaOrderNameTxt = new Scanner(new File("Restaurant\\Pizza Palace\\Order\\names.txt"));    // Reading order information to create pastOrders
         Scanner mamakOrderNameTxt = new Scanner(new File("Restaurant\\Mamak Spot\\Order\\names.txt"));    // Reading order information to create pastOrders
@@ -38,7 +39,7 @@ public class Admin extends User{
         }
     }
 
-    public void createAdminFile(String username, String password, String name) throws IOException{
+    public void createAdminFile(String username, String password, String name) throws IOException{  // Creates admin info file in admin directory, used for login
         adminDir = new File("Admin\\" + username +"\\");
         adminDir.mkdirs();
         new File(adminDir + "\\Order\\").mkdirs();                                              // code for making order file in restaurant directory
@@ -66,7 +67,7 @@ public class Admin extends User{
         this.pastOrders = newPastOrders;
     }
 
-    public static MyQueue<Rider> getRiderQueue() throws IOException{
+    public static MyQueue<Rider> getRiderQueue() throws IOException{        // Converts riderQueue.txt file into a MyQueue, used by other classes
         MyQueue<Rider> riderQueueObj = new MyQueue<Rider>();
         if (new File("Rider\\riderQueue.txt").exists()) {
             File riderQueueTxt = new File("Rider\\riderQueue.txt");
@@ -84,7 +85,7 @@ public class Admin extends User{
         }
     }
 
-    public static void setRiderQueue(MyQueue<Rider> newRiderQueue) throws IOException{ 
+    public static void setRiderQueue(MyQueue<Rider> newRiderQueue) throws IOException{      //Converts MyQueue object back into riderQueue.txt file, used by other classes
         MyQueue<Rider> tempQueue = newRiderQueue;
         
         File riderQueueTxt = new File("Rider\\riderQueue.txt");
@@ -101,7 +102,7 @@ public class Admin extends User{
         riderQueuePrintWriter.close();
     }
 
-    public static MyQueue<Order> getOrderQueue() throws IOException{
+    public static MyQueue<Order> getOrderQueue() throws IOException{            // Converts orderQueue.txt file into a MyQueue, used by other classes
         MyQueue<Order> orderQueueObj = new MyQueue<Order>();
         if (new File("Rider\\orderQueue.txt").exists()) {
             File orderQueueTxt = new File("Rider\\orderQueue.txt");
@@ -121,7 +122,7 @@ public class Admin extends User{
             return new MyQueue<Order>();
         }
     }
-    public static void setOrderQueue(MyQueue<Order> newOrderQueue) throws IOException { 
+    public static void setOrderQueue(MyQueue<Order> newOrderQueue) throws IOException {     //Converts MyQueue object back into orderQueue.txt file, used by other classes
         MyQueue<Order> tempQueue = newOrderQueue;
         
         File orderQueueTxt = new File("Rider\\orderQueue.txt");
@@ -146,7 +147,7 @@ public class Admin extends User{
     }
 
     @Override
-    public  boolean validateLogin(String userAttempt, String passwordAttempt){
+    public  boolean validateLogin(String userAttempt, String passwordAttempt){              //Used to verify if login information is correct
 		if(userAttempt.equals(getUsername()) && passwordAttempt.equals(getPassword()))
 			return true;
 		else

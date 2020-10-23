@@ -4,7 +4,7 @@ Pizza Palace
 Delivered
 43.0
 Delivery
-55 Place St., Malaysia
+123 street
 Chickenosaurus pizza
 20.0
 Roasted Chicken, Chicken Pepperoni and Mushroom Slices on our awesome Smoky Blended BBQ Sauce
@@ -15,4 +15,5 @@ Ultimate Hawaiian pizza
 Loads of delicious roasted chicken, shredded chicken juicy pineapples and fresh mushrooms on our brand new pizza.
 pastry
 2
+
 

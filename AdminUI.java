@@ -6,18 +6,16 @@ public class AdminUI {
         try {
             loginScreen();
 
-            //         Test iterating through files: 
-            // File [] test = new File("Customer").listFiles();
-            // for (int i = 0; i <= test.length; i++)
-            // System.out.println(test[i]);
         }
         catch (IOException | InterruptedException e) {
-            System.out.println("Error: " + e);
+            System.out.println("Error: " + e.getMessage());
+            System.out.println("Please restart the program.");
+
         }
 
     }
     
-    public static void deleteStringFromFile(File f, String deleteThis) throws IOException{
+    public static void deleteStringFromFile(File f, String deleteThis) throws IOException{          //Goes through a file and deletes any matching patterns of the provided string
 		File temp = new File("temp.txt"); // make a temp file to copy all the other names to it.
 		PrintWriter moveToTemp = new PrintWriter(temp);
 		Scanner originalContents = new Scanner(f);
@@ -35,7 +33,7 @@ public class AdminUI {
 		System.out.println(temp.renameTo(tempName)); 
     }
 
-    public static void loginScreen() throws IOException, InterruptedException{
+    public static void loginScreen() throws IOException, InterruptedException{     
         Scanner input = new Scanner(System.in);
         System.out.println("========================================================================");
         System.out.println("Please enter your admin username and password: (E.g. admin1 pass1234)");
@@ -63,6 +61,7 @@ public class AdminUI {
     
 
     public static void mainScreen(Admin a) throws IOException, InterruptedException{
+
         Scanner input = new Scanner(System.in);
         System.out.println("========================================================================");
         System.out.println("Welcome, " + a.getName() + ". Please select your desired option: ");
@@ -71,7 +70,8 @@ public class AdminUI {
         System.out.println("2. View restaurant statistics");
         System.out.println("3. View customer statistics");
         System.out.println("4. View combined order history");
-        System.out.println("5. Sign out");
+        System.out.println("5. View current rider queue");
+        System.out.println("6. Sign out");
         int choice = input.nextInt();
 
         //input.close();
@@ -88,36 +88,49 @@ public class AdminUI {
             viewOrderHistories(a);
         }
         else if (choice == 5) {
-            loginScreen();
+            viewRiderQueue(a);
+        }
+        else if (choice == 6) {
+            System.out.println("Sign out successful. Returning to login screen.");
+            Thread.sleep(2000);
+            loginScreen();;
+        }
+        else {
+            System.out.println("Error: Please select one of the available choices.");
+            Thread.sleep(2000);
+            mainScreen(a);
         }
     }
 
     public static void viewRidersScreen(Admin a) throws IOException, InterruptedException{
         ArrayList<Rider> riderList = new ArrayList<Rider>();
-        if (new File("Rider\\riderList.txt").exists()) {
+        if (new File("Rider\\riderList.txt").exists()) {                        //Reads in all rider usernames from riderList.txt
             File riderListTxt = new File("Rider\\riderList.txt");
             Scanner riderListReader = new Scanner(riderListTxt);
-            while (riderListReader.hasNext()){
+            while (riderListReader.hasNext()){                                  //Constructs rider objects for each username and adds them to a list
                 riderList.add(new Rider(riderListReader.nextLine()));
             }
             riderListReader.close();
         }
         else {
-            File riderNamesTxt = new File("Rider\\riderList.txt");
+            File riderNamesTxt = new File("Rider\\riderList.txt");              //If riderList.txt doesn't exist, creates one that is empty (only applicable when the system has no riders)
 		    riderNamesTxt.createNewFile();
         }
 
-        Collections.sort(riderList, Collections.reverseOrder());
+        Collections.sort(riderList, Collections.reverseOrder());                //Sorts riders by highest delivery count
 
         Scanner input = new Scanner(System.in);
         System.out.println("========================================================================");
         System.out.println("Riders: ");
         System.out.println("========================================================================");
-        System.out.println("Rider name                 Username                 Password                 Phone                 Delivery count");
+        System.out.printf("%-30s%-20s%-20s%-14s%-20s%n","Rider name", "Username","Password", "Phone", "Delivery count" );
+
+        // System.out.println("Rider name                 Username                 Password                 Phone                 Delivery count");
         System.out.println("_________________________________________________________________________________________________________________\n");
 
-        for (Rider rid : riderList) {                                                          ////// FIX FORMATTING HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            System.out.println(rid.getName() +"                 " + rid.getUsername() + "                 " + rid.getPassword() + "                 " + rid.getPhoneNum() + "                 " + rid.getDeliveryCount() );
+        for (Rider rid : riderList) {                                                         
+            System.out.printf("%-30s%-20s%-20s%-14s%-20d%n",rid.getName(), rid.getUsername(),rid.getPassword(), rid.getPhoneNum(), rid.getDeliveryCount());
+            //System.out.println(rid.getName() +"                 " + rid.getUsername() + "                 " + rid.getPassword() + "                 " + rid.getPhoneNum() + "                 " + rid.getDeliveryCount() );
         }
         System.out.println("\n\n");
         System.out.println("1. Add new rider");
@@ -135,21 +148,23 @@ public class AdminUI {
         else if (choice == 3) {
             mainScreen(a);
         }
-        else if (choice == 4) {
-            loginScreen();
+        else {
+            System.out.println("Error: Please select one of the available choices.");
+            Thread.sleep(2000);
+            viewRidersScreen(a);
         }
     
     }
 
     public static void viewResOrderCount(Admin a) throws IOException, InterruptedException{
         // File [] resDirectoryList = new File("Restaurant").listFiles();
-        ArrayList<Restaurant> resList = new ArrayList<Restaurant>();
+        ArrayList<Restaurant> resList = new ArrayList<Restaurant>();        //This section creates a list of all the restaurant objects
 
         resList.add(new Restaurant ("Pizza Palace","0123456789", "0123456789", "Come home to true Italian Pizza at Pizza Palace, we offer a wide range of home-made Italian Pizzas alongside a menu complete with classic and rustic Italian dishes and a variety of cocktails.", "29 Jalan Riong, Bangsar, Kuala Lumpur, MY 59100"));
         resList.add(new Restaurant ("Mishaltit", "0123456789","0123456789", "Mishaltit restaurant is the best choice for Arabic & Western cuisine , Promises a value lifestyle proposition of great variety and quality food at affordable prices ", " 226 Jalan Ampang, Kuala Lumpur, MY 50450"));
         resList.add(new Restaurant ("Mamak Spot", "0123456789", "0123456789", "Mamak Station brings you the best in comfort food from the diverse street vendors of Malaysia. Our food is a celebration of flavors...layered from Chinese, Indian, and Malay roots.", "2 Jalan Robertson, G4 & G5, Idaman Robertson, Kuala Lumpur, MY 50150"));
         
-        Collections.sort(resList, Collections.reverseOrder());
+        Collections.sort(resList, Collections.reverseOrder());              //Sorts restaurant list by highest order count
         // ArrayList<Integer> resOrderCounts = new ArrayList<Integer>();
         // for (int i = 0; i < resList.size(); i++) {
         //     File [] orderPaths = new File("Restaurant\\"+ resList.get(i).getUsername()+ "\\Order").listFiles();
@@ -159,10 +174,12 @@ public class AdminUI {
         System.out.println("====================================================================");
         System.out.println("Restaurants: ");
         System.out.println("====================================================================");
-        System.out.println("Restaurant name                 Username                 Order count");
+        System.out.printf("%-30s%-15s%-20s%n","Restaurant name", " Username","Order count" );
         System.out.println("____________________________________________________________________\n");
+
         for (int i = 0; i < resList.size(); i++) {
-            System.out.println(resList.get(i).getName() + "                 " + resList.get(i).getUsername() + "                 " + resList.get(i).getOrderCount());
+            System.out.printf("%-30s%-15s%-20d%n", resList.get(i).getName(), resList.get(i).getUsername(), resList.get(i).getOrderCount());
+            // System.out.println(resList.get(i).getName() + "                 " + resList.get(i).getUsername() + "                 " + resList.get(i).getOrderCount());
         }
         System.out.println("Enter anything to go back to previous menu");
         Scanner input = new Scanner(System.in);
@@ -170,15 +187,15 @@ public class AdminUI {
         mainScreen(a);
     }
 
-    public static void viewCusOrderCount(Admin a) throws IOException, InterruptedException{ //ADD COMPARATORS!!!!!!!!!!!!!!!
-        File [] cusDirectoryList = new File("Customer").listFiles();
+    public static void viewCusOrderCount(Admin a) throws IOException, InterruptedException{  
+        File [] cusDirectoryList = new File("Customer").listFiles();            //Creates a list of all customer user file paths
         ArrayList<Customer> cusList = new ArrayList<Customer>();
 
-        for (int i = 0; i < cusDirectoryList.length; i++) {
+        for (int i = 0; i < cusDirectoryList.length; i++) {             //Retrieves customer usernames from the file paths in cusDirectoryList
             String fullPath = cusDirectoryList[i].getPath();
             String shortPath = fullPath.replace("Customer\\", "");
             if (!shortPath.contains("lastID.txt")) {
-                cusList.add(new Customer(shortPath));
+                cusList.add(new Customer(shortPath));                   //Constructs Customer objects for all customers and adds them to a list
             }
 
             // cusList.add(new Customer(cusDirectoryList[i].getPath()));
@@ -190,14 +207,16 @@ public class AdminUI {
         //     cusOrderCounts.add(orderPaths.length);
         // }
 
-        Collections.sort(cusList, Collections.reverseOrder());
+        Collections.sort(cusList, Collections.reverseOrder());                          //Sorts customer list by highest order count
         System.out.println("====================================================================");
         System.out.println("Customers: ");
         System.out.println("====================================================================");
-        System.out.println("Customer name                 Username                 Order count");
+        System.out.printf("%-30s%-15s%-20s%n","Customer name", " Username","Order count" );
         System.out.println("____________________________________________________________________\n");
+
         for (int i = 0; i < cusList.size(); i++) {
-            System.out.println(cusList.get(i).getName() + "                 " + cusList.get(i).getUsername() + "                 " + cusList.get(i).getOrderCount()); //(cusOrderCounts.get(i)-1)
+            System.out.printf("%-30s%-15s%-20d%n", cusList.get(i).getName(), cusList.get(i).getUsername(), cusList.get(i).getOrderCount());
+            // System.out.println(cusList.get(i).getName() + "                 " + cusList.get(i).getUsername() + "                 " + cusList.get(i).getOrderCount()); //(cusOrderCounts.get(i)-1)
         }
         System.out.println("Enter anything to go back to previous menu");
         Scanner input = new Scanner(System.in);
@@ -205,14 +224,16 @@ public class AdminUI {
         mainScreen(a);
     }
 
-    public static void viewOrderHistories(Admin a) throws IOException, InterruptedException{        // FIX FORMATTING!!!!!!!!!!!!!!!!!!!!!!!!
+    public static void viewOrderHistories(Admin a) throws IOException, InterruptedException{                    //Shows combined order history for the whole system
         System.out.println("=================================================================================================================");
         System.out.println("Combined order history: ");
         System.out.println("=================================================================================================================");
-        System.out.println("Order ID        Customer Name       Restaurant Name        Order Price        Order Type        Assigned Rider");
+        System.out.printf("%-10s%-30s%-30s%-20s%-20s%-30s%n","Order ID", "Customer Name","Restaurant Name", "Order Price", "Order Type", "Assigned Rider" );
+        // System.out.println("Order ID        Customer Name       Restaurant Name        Order Price        Order Type        Assigned Rider");
         System.out.println("_________________________________________________________________________________________________________________\n");
         for (Order o : a.getPastOrders()){
-            System.out.println(o.getID() + "        " + o.getCusUsername() + "        " + o.getResName()+ "        " + o.getOrderPrice() + "        " + o.getOrderType() + "        " + o.getAssignedRider());
+            System.out.printf("%-10d%-30s%-30s%-20f%-20s%-30s%n",o.getID(), o.getCusUsername(),o.getResName(), o.getOrderPrice(), o.getOrderType(),  o.getAssignedRider());
+            // System.out.println(o.getID() + "        " + o.getCusUsername() + "        " + o.getResName()+ "        " + o.getOrderPrice() + "        " + o.getOrderType() + "        " + o.getAssignedRider());
         }
         System.out.println("Enter anything to go back to previous menu");
         Scanner input = new Scanner(System.in);
@@ -221,7 +242,7 @@ public class AdminUI {
     }
     public static void addNewRiderScreen(Admin a) throws IOException, InterruptedException{
 
-        ArrayList<Rider> riderList = new ArrayList<Rider>();
+        ArrayList<Rider> riderList = new ArrayList<Rider>();        //This section reads in the existing list of riders
         if (new File("Rider\\riderList.txt").exists()) {
             File riderListTxt = new File("Rider\\riderList.txt");
             Scanner riderListReader = new Scanner(riderListTxt);
@@ -238,7 +259,7 @@ public class AdminUI {
         System.out.println("========================================================================");
         System.out.println("Desired username: (E.g. \"ryab12\") ");
         String usernameAttempt = input.nextLine();
-        for (Rider r : riderList) {
+        for (Rider r : riderList) {                                         //Checks if another rider already has this username, returns error if so
             if (r.getUsername() == usernameAttempt){
                 System.out.println("Error: Username already taken. Please try a different one. ");
                 addNewRiderScreen(a);
@@ -254,27 +275,28 @@ public class AdminUI {
 
         //input.close();
         // System.out.println("Alternatively, enter \"BACK\" to go to the previous menu. ");
-        Rider rid = new Rider(usernameAttempt, passAttempt, nameAttempt, phoneAttempt);
+        Rider rid = new Rider(usernameAttempt, passAttempt, nameAttempt, phoneAttempt);         //Constructs new rider using the specified info
         riderList.add(rid);
 
-        File ridDir = new File("Rider\\" + rid.getUsername());
+        File ridDir = new File("Rider\\" + rid.getUsername());                              //Creates directory for new rider
         ridDir.mkdir(); // make the directory using the Rider username
 
         File ridOrderDir = new File("Rider\\" + rid.getUsername() + "\\Order\\");
         ridOrderDir.mkdir();
 
         
-        File orderQueueTxt = new File("Rider\\orderQueue.txt");
+        File orderQueueTxt = new File("Rider\\orderQueue.txt");             //Creates orderQueue.txt file if it doesnt exist
         orderQueueTxt.createNewFile();
 
-        File riderQueueTxt = new File("Rider\\riderQueue.txt");
+        File riderQueueTxt = new File("Rider\\riderQueue.txt");              //Creates riderQueue.txt file if it doesnt exist
         riderQueueTxt.createNewFile();
-        FileWriter ridQueueFileWriter = new FileWriter(riderQueueTxt, true);
+
+        FileWriter ridQueueFileWriter = new FileWriter(riderQueueTxt, true);            //Adds new rider to riderQueue.txt
         PrintWriter ridQueuePrintWriter = new PrintWriter(ridQueueFileWriter);
         ridQueuePrintWriter.println(rid.getUsername());
         ridQueuePrintWriter.close();
 
-        File riderListTxt = new File("Rider\\riderList.txt");
+        File riderListTxt = new File("Rider\\riderList.txt");                           //Adds new rider to riderList.txt
         riderListTxt.createNewFile();
         FileWriter ridListFileWriter = new FileWriter(riderListTxt, true);
         PrintWriter ridListPrintWriter = new PrintWriter(ridListFileWriter);
@@ -288,7 +310,7 @@ public class AdminUI {
         
     }
     public static void manageRidersScreen1(Admin a) throws IOException, InterruptedException{
-        ArrayList<Rider> riderList = new ArrayList<Rider>();
+        ArrayList<Rider> riderList = new ArrayList<Rider>();                        //Reads in list of all riders
         if (new File("Rider\\riderList.txt").exists()) {
             File riderListTxt = new File("Rider\\riderList.txt");
             Scanner riderListReader = new Scanner(riderListTxt);
@@ -302,30 +324,44 @@ public class AdminUI {
 		    riderNamesTxt.createNewFile();
         }
 
-        Collections.sort(riderList, Collections.reverseOrder());
+        Collections.sort(riderList, Collections.reverseOrder());                    //Sorts riders by highest delivery count
 
         Scanner input = new Scanner(System.in);
         System.out.println("========================================================================");
         System.out.println("Please select a rider by entering the corresponding number: ");
         System.out.println("========================================================================");
-        System.out.println("Rider name                 Username                 Password                 Phone                 Delivery count");
-        System.out.println("_________________________________________________________________________________________________________________");
+
+        System.out.printf("%-30s%-20s%-20s%-20s%-20s%n","Rider name", "Username","Password", "Phone", "Delivery count" );
+
+        System.out.println("_________________________________________________________________________________________________________________\n");
         int counter = 0;
-        for (Rider rid : riderList) {                                                          ////// FIX FORMATTING HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            System.out.println(++counter + ") " + rid.getName() +"                 " + rid.getUsername() + "                 " + rid.getPassword() + "                 " + rid.getPhoneNum() + "                 " + rid.getDeliveryCount() );
+
+        for (Rider rid : riderList) {                                                         
+            System.out.printf("%s%-30s%-20s%-20s%-20s%-20d%n",++counter + ") ",rid.getName(), rid.getUsername(),rid.getPassword(), rid.getPhoneNum(), rid.getDeliveryCount());
         }
+
+        
+        // System.out.println("_________________________________________________________________________________________________________________");
+        // for (Rider rid : riderList) {                                                          
+        //     System.out.println(++counter + ") " + rid.getName() +"                 " + rid.getUsername() + "                 " + rid.getPassword() + "                 " + rid.getPhoneNum() + "                 " + rid.getDeliveryCount() );
+        // }
         System.out.println(++counter + ") Back");
         int choice = input.nextInt();
 
         //input.close();
         if (choice <= riderList.size() && choice > 0) {
-            manageRidersScreen2(a, riderList.get(choice-1));
+            manageRidersScreen2(a, riderList.get(choice-1));                //Opens manageRidersScreen2 using the selected rider
         }
-        else if (choice == riderList.size()+1) {
+        else if (choice == riderList.size()+1) {                            //Back button
             viewRidersScreen(a);
         }
+        else {
+            System.out.println("Error: Please select one of the available choices.");
+            Thread.sleep(2000);
+            manageRidersScreen1(a);
+        }
     }
-    public static void manageRidersScreen2(Admin a, Rider r) throws IOException, InterruptedException{
+    public static void manageRidersScreen2(Admin a, Rider r) throws IOException, InterruptedException{          //This screen shows the selected rider from manageRidersScreen1, and allows user to edit the rider's info
         Scanner input = new Scanner(System.in);
 
         System.out.println("========================================================================");
@@ -362,6 +398,11 @@ public class AdminUI {
         else if (choice == 4) {
             viewRidersScreen(a);
         }
+        else {
+            System.out.println("Error: Please select one of the available choices.");
+            Thread.sleep(2000);
+            manageRidersScreen2(a,r);
+        }
 
     }
     public static void editRiderNameScreen(Admin a, Rider r) throws IOException, InterruptedException{
@@ -383,10 +424,26 @@ public class AdminUI {
     }
 
 
-    // public static void editRiderUsernameScreen(Admin a, Rider r) throws IOException, InterruptedException{
+    
+    public static void viewRiderQueue(Admin a) throws IOException, InterruptedException{
+        Scanner input = new Scanner(System.in);
 
-    // }
+        System.out.println("========================================================================");
+        System.out.println("Current rider queue: ");
+        System.out.println("========================================================================");
+        int counter = 0;
 
+        MyQueue<Rider> ridQueue = Admin.getRiderQueue();
+        while (!ridQueue.isEmpty()){
+            System.out.println("#"+ ++counter + " " + ridQueue.poll().getUsername());
+        }
+
+        System.out.println("1) Back ");
+        String choice = input.nextLine();
+        mainScreen(a);
+        //input.close();
+  
+    }
 
     public static void editRiderPasswordScreen(Admin a, Rider r) throws IOException, InterruptedException{
         Scanner input = new Scanner(System.in);
@@ -423,7 +480,7 @@ public class AdminUI {
         manageRidersScreen2(a, r);
     }
 
-    public static void deleteRiderScreen(Admin a, Rider r) throws IOException, InterruptedException{
+    public static void deleteRiderScreen(Admin a, Rider r) throws IOException, InterruptedException{            //Unused method
         Scanner input = new Scanner(System.in);
 
         System.out.println("========================================================================");
