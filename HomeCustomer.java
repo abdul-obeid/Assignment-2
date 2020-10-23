@@ -341,12 +341,17 @@ public class HomeCustomer {
         int menuChoices = 1;
         ArrayList<Item> menuContents = r.getMenu().getMenuContents();
 
-        //Collections.sort(menuContents, new comp); // ITEM COMPARATOR GOES HERE!!!!!!!!!
+        Collections.sort(menuContents, new ItemCompartorByPrice()); // ITEM COMPARATOR GOES HERE!!!!!!!!!
+
+        System.out.printf("%-42s%-20s%-10s%n","Item name", "Type","Price (RM)");
+
+        System.out.println("_________________________________________________________________________________________________________________\n");
 
         for (Item i : menuContents){
-            System.out.println(menuChoices + ". " + i.getItemName()+"        "+i.getItemType()+"        "+i.getItemPrice());
+            System.out.printf("%-2s%-40s%-20s%-10f%n",menuChoices + ". ", i.getItemName(),i.getItemType(),i.getItemPrice());
             menuChoices++;
         }
+
         System.out.println(menuChoices++ + ". View shopping cart ");
         System.out.println(menuChoices + ". Back to restaurant ");
         System.out.println("========================================================================");
