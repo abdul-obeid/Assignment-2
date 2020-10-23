@@ -19,19 +19,21 @@ public class Restaurant extends User implements Comparable<Restaurant>{
 		this.description = description;
 		this.address = address;
 		try{
-			File f = new File("Restaurant/" + name + "/Order/");
-			File[] files = f.listFiles();
-			this.orderCount = files.length - 1;
 			sendRestToFile(); // used to make a directory for the restaurant
 			menu = new Menu(name, restDir); // send Restaurant name and Directory file to make the menu
+			File f = new File("Restaurant/" + name + "/Order/");
+			if(f.exists()){ // if there is at least one order has been made for the restaurant, set the order count to the number of files inside the order directory - 1 (names of orders file)
+				File[] files = f.listFiles();
+				this.orderCount = files.length - 1;
+			}
+			else
+				this.orderCount = 0;
 		}
 		catch(IOException ex){
 			System.out.println("File or directory not found " + ex.getMessage());
 		}
-		catch(NullPointerException ex){
-			System.out.println("File or directory not found " + ex.getMessage());
-		}
-	}	
+	}		
+	
 	private void sendRestToFile() throws FileNotFoundException{ // used to make a directory for the restaurant
 		restDir = new File("Restaurant/" + name);
 		restDir.mkdir(); // make the directory using the restaurant name
@@ -42,7 +44,6 @@ public class Restaurant extends User implements Comparable<Restaurant>{
 		outputRestInfo.println(getPassword());
 		outputRestInfo.println(description);
 		outputRestInfo.println(address);
-		outputRestInfo.println(orderCount);
 		outputRestInfo.close(); // close basicInfo.txt file
 	}
 	public void setName(String name){
@@ -74,6 +75,9 @@ public class Restaurant extends User implements Comparable<Restaurant>{
 	public String getDescription(){
         return this.description;
     }
+	public void setDescription(String description){
+        this.description = description;
+    }
 	public ArrayList<Order> getCurrentOrders(){ // get the active orders which not collected yet
 		try{
 			readOrderHistoryFromFiles(); // reads the order files and sets them as history  
@@ -81,10 +85,6 @@ public class Restaurant extends User implements Comparable<Restaurant>{
 		catch(IOException ex){
 			System.out.println("File not found: " + ex.getMessage());
 		}
-		// for (int i = 0; i < pastOrders.size(); ++i){
-			// if(!pastOrders.get(i).getOrderStatus().equals("Collected") && !pastOrders.get(i).getOrderStatus().equals("Delivered"))
-				// currentOrders.add(pastOrders.get(i));
-		// }
 		return currentOrders;
 	}
 	
@@ -123,7 +123,7 @@ public class Restaurant extends User implements Comparable<Restaurant>{
 		return ("Restaurant Name: " + name + "\n, Address: " + address + ", About us: " + description);
 	}
 	
-	public  boolean validateLogin(String userAttempt, String passwordAttempt){
+	public  boolean validateLogin(String userAttempt, String passwordAttempt){ // return true if the username and password matches
 		if(userAttempt.equals(getUsername()) && passwordAttempt.equals(getPassword()))
 			return true;
 		else
@@ -137,7 +137,7 @@ public class Restaurant extends User implements Comparable<Restaurant>{
 	}
 	
 	@Override
-	public int compareTo(Restaurant r){
+	public int compareTo(Restaurant r){ // comparable method to sort restaurants by number of orders they have
 		return getOrderCount() - r.getOrderCount();
 	}
 

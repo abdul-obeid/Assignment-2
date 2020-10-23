@@ -1,6 +1,20 @@
 import java.util.*;
+/**
+ * The {@code MyQueue} class represents a first-in-first-out (FIFO) queue of
+ * generic items. It supports the usual <em>enqueue (add)</em> and <em>dequeue(poll)</em>
+ * operations, with methods for peeking at the top item, testing if the
+ * queue is empty, getting the size of the queue, and toString method that returns the items in queue 
+ * in proper FIFO order.
+ * <p>
+ * This implementation uses the singly-linked list idea, that is implemented using the linked nodes 
+ *
+ */
 
+//
 
+/**
+* @param <E> the generic type of the element in the nodes.
+*/
 class Node<E> {
   E element;
   Node<E> next;
@@ -9,17 +23,19 @@ class Node<E> {
     this.element = element;
   }
 }
-
-
+/**
+* @param <E> the generic type of an item in this queue
+*/
 public class MyQueue<E> {
-	private Node<E> head, tail;
-	private int size = 0;
+	private Node<E> head; // head of the queue
+	private Node<E> tail; // end of the queue
+	private int size = 0; // size of the queue (number of elements)
 	
-	
-	// private java.util.LinkedList<E> list 
-	// = new java.util.LinkedList<E>();
-		
-		
+	/**
+    * Returns the firt item has been added to this queue.
+    *
+    * @return the firt item has been added to this queue, if queue is empty, return null
+    */
 	public E peek() {
 		if (size == 0) {
 		  return null;
@@ -28,6 +44,12 @@ public class MyQueue<E> {
 		  return head.element;
 		}
 	}
+	
+	/**
+     * Add item to the queue (will be added to the end of queue).
+     *
+     * @param E the item to be added
+     */
 	
 	public void add(E e) { // add to the last
 		Node<E> newNode = new Node<>(e); // Create a new node for element e
@@ -43,11 +65,11 @@ public class MyQueue<E> {
 		size++; // Increase size
 	}
 	
-	// public void enqueue(E e) {
-		// list.addLast(e);
-	// }
-
-
+	 /**
+     * Removes and returns the first item on this queue .
+     *
+     * @return the first item on this queue, if queue is empty, return null
+     */
 
 	public E poll() {
 		if (size == 0) {
@@ -63,22 +85,42 @@ public class MyQueue<E> {
 		  return temp;
 		}
 	}
+	
+	 /**
+     * Remove all the elements from a queue, The queue will be empty after this method returns.
+     * 
+     */
   
-	// public E dequeue() {
-		// return list.removeFirst();
-	// }
 	public void clear() {
 		head = tail = null;
 		size = 0;
 	}
+	
+	/**
+    * Returns size of queue (number of items).
+    *
+    * @return size of queue
+    */
 
 	public int size() {
 		return size;
 	}
 	
+	/**
+    * Returns true if this queue is empty.
+    *
+    * @return {@code true} if this queue is empty(size = 0); {@code false} otherwise (size > 0)
+    */
+	
 	public boolean isEmpty() {
 		return size == 0;
     }
+	
+	/**
+    * Returns a string representation of this queue.
+    *
+    * @return the sequence of items in FIFO order, closed by square brackets separated by spaces and commas
+    */
 
 	@Override
 	public String toString() {
@@ -98,44 +140,5 @@ public class MyQueue<E> {
 		  }
 		}
 		return result.toString();
-	}
-}
-
-
-class TestGenericQueue{
-	public static void main(String[] args){
-		Scanner input = new Scanner(System.in);
-		Random r = new Random();
-		
-		MyQueue<Integer> queue = new MyQueue<>();
-		int choice;
-		do{
-			System.out.println("Queue: " + queue);
-			System.out.println("1 - add a random integer (0-100) into queue");
-			System.out.println("2 - poll from queue");
-			System.out.println("3 - peek queue");
-			System.out.println("4 - Clear queue");
-			System.out.println("5 - get queue size");
-			System.out.println("6 - is queue empty?");
-			System.out.println("0 - Exit");
-			System.out.print("Command > ");
-			choice = input.nextInt();
-			
-			switch(choice){
-					case 1: queue.add(r.nextInt(100));
-							break;
-					case 2: System.out.println(queue.poll());
-							break;
-					case 3: System.out.println(queue.peek());
-							break;
-					case 4: queue.clear();
-							break;
-					case 5: System.out.println(queue.size());
-							break;	
-					case 6: System.out.println(queue.isEmpty());
-							break;
-			}
-		}while(choice != 0);
-	
 	}
 }

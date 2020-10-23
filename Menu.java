@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 public class Menu{
-	private ArrayList<Item> menuContents = new ArrayList<>();
+	private ArrayList<Item> menuContents = new ArrayList<>(); //arrayList that contains the items in the menu
 	private File menuDir;
 	public Menu(){
 		
@@ -23,7 +23,7 @@ public class Menu{
 	}
 	
 	
-	public void addNewItem() throws IOException{ // makes a new file for the items (used to update and input new items)
+	public void addNewItem() throws IOException{ // makes a new item object (used to update and input new items)
 		RestaurantUI.clearScreen();
 		boolean existFlag = false;
 		Scanner scan = new Scanner(System.in);
@@ -31,7 +31,7 @@ public class Menu{
 		
 		System.out.print("Enter item Name: ");
 		newItem.setItemName(scan.nextLine());
-		for(int i = 0; i < menuContents.size(); ++i){
+		for(int i = 0; i < menuContents.size(); ++i){ // checks if the item name is already taken
 			if(menuContents.get(i).getItemName().equals(newItem.getItemName()))
 				existFlag = true;
 		}
@@ -51,7 +51,7 @@ public class Menu{
 			
 			System.out.print("Enter item Type: ");
 			newItem.setItemType(scan.nextLine());
-			addItemToMenuDir(newItem);
+			addItemToMenuDir(newItem); // 
 			System.out.print("Item successfully added");
 			RestaurantUI.loadingWait();
 		}
@@ -62,15 +62,12 @@ public class Menu{
 		PrintWriter outputNames =  new PrintWriter(NamesFileOutput); // PrintWriter to write to Itemsnames.txt
 		
 		
-		String itemName = newItem.getItemName();
-		// itemName = itemName.replace(' ', '_'); // replace the spaces in the item name with _ to make reading the files easier
-		
+		String itemName = newItem.getItemName(); // send the item name to file
 		outputNames.println(itemName);
-		
 		
 		File itemFile = new File(menuDir + "/"  + itemName + ".txt"); // makes a new file with the new item name and its information
 		PrintWriter outputItem =  new PrintWriter(itemFile);
-		outputItem.println(newItem.writeToFile());
+		outputItem.println(newItem.writeToFile()); // use the writeToFile method in Item class to sort the item in file 
 		outputItem.close();
 		
 		outputNames.close();
@@ -83,9 +80,7 @@ public class Menu{
 		
 		while(originalNames.hasNext()){
 			String nextName = originalNames.nextLine();
-			// nextName = nextName.replace('_', ' ');
 			if(!nextName.equals(removedItem.getItemName())){
-				// nextName = nextName.replace(' ', '_');
 				moveToTemp.println(nextName);
 			}
 		}
@@ -93,14 +88,12 @@ public class Menu{
 		moveToTemp.close();
 		originalNames.close();
 		File tempName = NamesFileInput;
-		System.out.println(NamesFileInput.delete());
 		System.out.println(temp.renameTo(tempName)); // give the temp file the name "ItemsName" after deleting the old one
 		menuContents.remove(removedItem);
 	}
 	
 	
 	public void copyItems() throws FileNotFoundException{ // copy the items with the names from ItemsNames.txt to the actual menuContents
-		// Item.resetLastID();
 		menuContents.clear(); // clear the menuContents to avoid redundant items
 		File NamesFileInput = new File(menuDir + "/ItemsNames.txt" );
 		Scanner inputNames = new Scanner(NamesFileInput);
@@ -119,7 +112,6 @@ public class Menu{
 	}
 	
 	public void showItems(){
-		
 		try{
 			copyItems(); // copy the items from the files to the menuContents 
 		}
@@ -141,7 +133,6 @@ public class Menu{
 			for(numberOfItems  = 0; numberOfItems < menuContents.size(); ++numberOfItems){
 				System.out.print("\t\t\t\t|");
 				System.out.printf("%-6s %-33s %-6d %-5.2f %11s %n", ("  "+ (numberOfItems + 1)), menuContents.get(numberOfItems).getItemName(), menuContents.get(numberOfItems).getItemID(), menuContents.get(numberOfItems).getItemPrice(),"|");
-				// System.out.println("\t\t\t\t| " + (numberOfItems + 1) + "| " + menuContents.get(numberOfItems).getItemName() );
 			}
 			System.out.println("\t\t\t\t+----------------------------------------------------------------+");
 			System.out.println("\t\t\t\t| " + (numberOfItems + 1) + ") " + "Back to main menu");
@@ -196,7 +187,7 @@ public class Menu{
 		}while(true);
 	}
 	
-	public void updateItem(Item updatedItem){
+	public void updateItem(Item updatedItem){ // show options to edit an existing Item form the menu
 		Scanner scan = new Scanner(System.in);
 		int choosenAttribute = 0;
 		do{

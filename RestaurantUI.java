@@ -2,37 +2,16 @@ import java.io.*;
 import java.util.*;
 
 public class RestaurantUI{
-		static MyQueue<Rider> riderQueue = new MyQueue<>(); // temp
-		// try{
-			// static MyQueue<Rider> queue = Admin.getRiderQueue();
-		// }
-		// catch(IOException ex){
-			// System.out.println(ex.getMessage());
-		// }
-		
 	public static void  main(String[] args){
 		File allRestDir = new File("Restaurant");
 		allRestDir.mkdir();
+		// set the restaurants objects and their basic info
 		Restaurant[] restaurants = {new Restaurant ("Pizza Palace","0123456789", "0123456789", "Come home to true Italian Pizza at Pizza Palace, we offer a wide range of home-made Italian Pizzas alongside a menu complete with classic and rustic Italian dishes and a variety of cocktails.", "29 Jalan Riong, Bangsar, Kuala Lumpur, MY 59100"),
 									new Restaurant ("Mishaltit", "0123456789","0123456789", "Mishaltit restaurant is the best choice for Arabic & Western cuisine , Promises a value lifestyle proposition of great variety and quality food at affordable prices ", " 226 Jalan Ampang, Kuala Lumpur, MY 50450"),
 									new Restaurant ("Mamak Spot", "0123456789", "0123456789", "Mamak Station brings you the best in comfort food from the diverse street vendors of Malaysia. Our food is a celebration of flavors...layered from Chinese, Indian, and Malay roots.", "2 Jalan Robertson, G4 & G5, Idaman Robertson, Kuala Lumpur, MY 50150")};
-		// System.out.println(restaurants[0].getOrderCount());
-		setDefaultItems(restaurants);
-		// riderQueue.add(new Rider("saber01","sub009","Saber","0113724413"));
-		// riderQueue.add(new Rider("julio32","jul009","Julio","0114578665"));
-		selectRestaurant(restaurants);
 		
-		
-		// try{
-			// restaurants[0].getMenu().showItems();
-			// restaurants[0].getMenu().removeItem(restaurants[0].getMenu().getMenuContents().get(0));
-			// restaurants[0].getMenu().showItems();
-		// }
-		// catch(FileNotFoundException ex){
-			// System.out.println("not found");
-		// }
-		
-		
+		setDefaultItems(restaurants); // if the restaurant doesn't have a menu yet ( the very first run), it will make the defaualt menu.
+		selectRestaurant(restaurants); // choose a specific restaurant
 	}
 	static void selectRestaurant(Restaurant[] restaurants){
 		Scanner scan = new Scanner(System.in);
@@ -46,7 +25,6 @@ public class RestaurantUI{
 			System.out.println("\t\t\t   |\t|_| \\_\\___||___/\\__\\__,_|\\__,_|_|  \\__,_|_| |_|\\__|___/\t    |");
 			System.out.println("\t\t\t   |\t\t\t\t\t\t\t\t    |");
 			for(int i = 0; i < restaurants.length; ++i){
-				
 				System.out.print("\t\t\t   |\t\t\t" + (i+1) + ") " 
 									+ restaurants[i].getName() + "\t\t\t\t    |");
 				System.out.println();
@@ -97,7 +75,7 @@ public class RestaurantUI{
 		}
 	}
 	
-	static void setDefaultItems(Restaurant[] restaurants){
+	static void setDefaultItems(Restaurant[] restaurants){ // if the restaurant doesn't have a menu yet ( the very first run), it will make the defaualt menu.
 		try{
 			if(restaurants[0].getMenu().getMenuContents().size() == 0){
 				restaurants[0].getMenu().addItemToMenuDir(new Item("Chickenosaurus pizza", 20 ,"Roasted Chicken, Chicken Pepperoni and Mushroom Slices on our awesome Smoky Blended BBQ Sauce", "pastry"));
@@ -141,7 +119,7 @@ public class RestaurantUI{
 		System.out.print("\t Password: ");
 		String password = scan.nextLine();
 		
-		if(loginRestaurant[restChoice -1].validateLogin(username, password)){
+		if(loginRestaurant[restChoice -1].validateLogin(username, password)){ // checks that the entered username and password are correct 
 			clearScreen();
 			System.out.println("\t\t\t _                _         ____                               __       _ _ ");
 		System.out.println("\t\t\t| |    ___   __ _(_)_ __   / ___| _   _  ___ ___ ___  ___ ___ / _|_   _| | |");
@@ -150,7 +128,7 @@ public class RestaurantUI{
 		System.out.println("\t\t\t|_____\\___/ \\__, |_|_| |_| |____/ \\__,_|\\___\\___\\___||___/___/_|  \\__,_|_(_)");
 		System.out.println("\t\t\t            |___/                                                           ");
 		loadingWait();
-			resturantDashboard(loginRestaurant[restChoice -1]);
+		resturantDashboard(loginRestaurant[restChoice -1]); // if correct, move to dashboard
 		}
 		else{
 			System.out.print("Username or Password is incorrect, (type back to select restaurant or else to try again): ");
@@ -182,15 +160,13 @@ public class RestaurantUI{
 			try{
 				int dashCohice = scan.nextInt();
 				if(dashCohice == 1){
-					// for(int i = 0; i < restaurant.getPastOrders().size(); ++i){
-						showAndUpdateCurrentOrders(restaurant);
-						resturantDashboard(restaurant);
-						break;
-					// }
+					showAndUpdateCurrentOrders(restaurant); // shows the orders with status other than Deliverd, Collected
+					resturantDashboard(restaurant);
+					break;
 				}
 				else if(dashCohice == 2){
 					clearScreen();
-					for(int i = 0; i < restaurant.getPastOrders().size(); ++i){
+					for(int i = 0; i < restaurant.getPastOrders().size(); ++i){ // shows a brief about order history (Deliverd, Collected)
 						System.out.println(restaurant.getPastOrders().get(i));
 					}
 					System.out.println("Press Enter to go back");
@@ -198,13 +174,13 @@ public class RestaurantUI{
 					scan.nextLine();
 				}
 				else if(dashCohice == 3){
-					restaurant.getMenu().showItems();
+					restaurant.getMenu().showItems(); // show the items in menu in a proper way
 					resturantDashboard(restaurant);
 					break;
 				}
 				else if(dashCohice == 4){
 					try{
-						restaurant.getMenu().addNewItem();
+						restaurant.getMenu().addNewItem(); // make new item in the menu
 						resturantDashboard(restaurant);
 						break;
 					}
@@ -233,14 +209,13 @@ public class RestaurantUI{
 		Scanner scan = new Scanner(System.in);
 		if(restaurant.getCurrentOrders().size() == 0){
 			System.out.print("you have no orders in the meanTime");
-			// return;
 			loadingWait();
 		}
 		else{
 			clearScreen(); // clear the screen
 			System.out.println();
 			System.out.println();
-			for(int i = 0; i < restaurant.getCurrentOrders().size(); ++i){
+			for(int i = 0; i < restaurant.getCurrentOrders().size(); ++i){ // shows brief about corrent order
 				System.out.println("\t\t " + (i+1) +"# " + restaurant.getCurrentOrders().get(i));
 			}
 			System.out.print("\n\n\t\t" + "choose number of order to show or update: ");
@@ -262,20 +237,19 @@ public class RestaurantUI{
 				}
 				System.out.println("|\tTotal Price: RM" + restaurant.getCurrentOrders().get(choosenOrder).getOrderPrice());
 				System.out.println("|\n|\t1) Back to Restaurant Dashboard ");
-				if(!restaurant.getCurrentOrders().get(choosenOrder).getOrderStatus().equals("Delivering") && !(restaurant.getCurrentOrders().get(choosenOrder).getOrderStatus().equals("Ready") && restaurant.getCurrentOrders().get(choosenOrder).getOrderType().equals("Delivery")))
+				if(!restaurant.getCurrentOrders().get(choosenOrder).getOrderStatus().equals("Delivering") && !(restaurant.getCurrentOrders().get(choosenOrder).getOrderStatus().equals("Ready") && restaurant.getCurrentOrders().get(choosenOrder).getOrderType().equals("Delivery"))) // won't give the chocie to update order status if the order is with a rider or its in the order queue already
 					System.out.println("|\t2) Update Order Status ");
 				System.out.print("|\t>>");
 				int choosenAction = scan.nextInt();
-				if(choosenAction == 2){
-					if(restaurant.getCurrentOrders().get(choosenOrder).getOrderType().equals("Collection")){
+				if(choosenAction == 2){ // update the order status
+					if(restaurant.getCurrentOrders().get(choosenOrder).getOrderType().equals("Collection")){ // if order type is collection, give these options
 						System.out.println("|\n|\n|\t1)Change to Ready ");
 						System.out.println("|\t2)Change to Collected ");
 						System.out.print("|\t>>");
 						int newStatus = scan.nextInt();
 						if(newStatus == 1){
 							try{
-								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Ready");
-								// customer.getCurrentOrder().setOrderStatus("Ready");
+								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Ready"); // change order status to ready
 							}
 							catch(IOException ex){
 								System.out.println(ex.getMessage());
@@ -283,9 +257,8 @@ public class RestaurantUI{
 						}
 						else if(newStatus == 2){
 							try{
-								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Collected");
+								restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Collected"); // change order status to collected
 								break;
-								// customer.getCurrentOrder().setOrderStatus("Ready");
 							}
 							catch(IOException ex){
 								System.out.println(ex.getMessage());
@@ -299,7 +272,7 @@ public class RestaurantUI{
 						int newStatus = scan.nextInt();
 						if(newStatus == 1){
 							try{
-								MyQueue<Rider> riderQueue = Admin.getRiderQueue();
+								MyQueue<Rider> riderQueue = Admin.getRiderQueue(); // check if rider queue is empty, send the order to orderQueue, otherwise, assign it to the first rider in queue
 								if(!riderQueue.isEmpty()){
 									restaurant.getCurrentOrders().get(choosenOrder).replaceOrderStatus(restaurant.getCurrentOrders().get(choosenOrder), "Delivering");
 									riderQueue.poll().setCurrentOrderLabel(restaurant.getCurrentOrders().get(choosenOrder).getCusUsername() + "_" + restaurant.getCurrentOrders().get(choosenOrder).getID());
