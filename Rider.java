@@ -148,8 +148,8 @@ public class Rider extends User implements Comparable<Rider>{
 		this.currentOrder = currentOrder;
 	}
 	
-	public Order getCurrentOrderLabel(){
-		return currentOrder;
+	public String getCurrentOrderLabel(){
+		return currentOrderLabel;
 	}
 	
 	public void setCurrentOrderLabel(String currentOrderLabel){ // et the currentOrderLabel and send it to files

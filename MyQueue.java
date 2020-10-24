@@ -6,12 +6,11 @@ import java.util.*;
  * queue is empty, getting the size of the queue, and toString method that returns the items in queue 
  * in proper FIFO order.
  * <p>
- * This implementation uses the singly-linked list idea, that is implemented using the linked nodes 
- *
+ * </strong>This implementation uses the singly-linked list idea, that is implemented using the linked nodes</strong> 
+ *</p>
  */
 
 //
-
 /**
 * @param <E> the generic type of the element in the nodes.
 */
@@ -24,7 +23,14 @@ class Node<E> {
   }
 }
 /**
+* The {@code MyQueue} class represents a first-in-first-out (FIFO) queue of
+* generic items. It supports the usual <em>enqueue (add)</em> and <em>dequeue(poll)</em>
+* operations, with methods for peeking at the top item, testing if the
+* queue is empty, getting the size of the queue, and toString method that returns the items in queue 
+* in proper FIFO order.
 * @param <E> the generic type of an item in this queue
+* @author OMAR CHALLAF
+* @author ABDULRAHMAN IBRAHIM 
 */
 public class MyQueue<E> {
 	private Node<E> head; // head of the queue
@@ -48,7 +54,7 @@ public class MyQueue<E> {
 	/**
      * Add item to the queue (will be added to the end of queue).
      *
-     * @param E the item to be added
+     * @param e the item to be added
      */
 	
 	public void add(E e) { // add to the last

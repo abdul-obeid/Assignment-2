@@ -82,9 +82,6 @@ public class Item {
 	public static int getLastID(){
 		return lastID;
 	}
-	public static void resetLastID( ){
-		lastID = 0;
-	}
 	
 	public void setItemName(String itemName){
 		this.itemName = itemName;

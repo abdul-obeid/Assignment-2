@@ -49,19 +49,19 @@ public class RestaurantUI{
 		}while(true);
 	}
 	static void clearScreen() {
-		try{
-			final String osName = System.getProperty("os.name");
-			if (osName.toLowerCase().contains("windows"))
-				new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-			else
-				new ProcessBuilder("clear").inheritIO().start().waitFor();
-		}
-		catch(IOException ex){
-				System.out.println(ex.getMessage());
-		}
-		catch(InterruptedException ex){
-				System.out.println(ex.getMessage());				
-		}
+		// try{
+			// final String osName = System.getProperty("os.name");
+			// if (osName.toLowerCase().contains("windows"))
+				// new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+			// else
+				// new ProcessBuilder("clear").inheritIO().start().waitFor();
+		// }
+		// catch(IOException ex){
+				// System.out.println(ex.getMessage());
+		// }
+		// catch(InterruptedException ex){
+				// System.out.println(ex.getMessage());				
+		// }
 	}
 	
 	static void loadingWait(){
