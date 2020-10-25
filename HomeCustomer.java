@@ -389,8 +389,8 @@ public class HomeCustomer {
                       +"\n\nContents:"); 
 
         for (int i = 0; i< crt.getChosenItems().size(); i++){
-            System.out.println(crt.getChosenItems().get(i).getItemName() + "           " + (crt.getChosenItems().get(i)).getItemPrice()+" RM.");    //Prints out items in cart
-            
+            //System.out.println(crt.getChosenItems().get(i).getItemName() + "           " + (crt.getChosenItems().get(i)).getItemPrice()+" RM.");    //Prints out items in cart
+            System.out.printf("%30s%10f%2s%n", crt.getChosenItems().get(i).getItemName(), (crt.getChosenItems().get(i)).getItemPrice(), " RM");
         }
         System.out.println("\n");
         System.out.println("========================================================================");

@@ -228,11 +228,11 @@ public class AdminUI {
         System.out.println("=================================================================================================================");
         System.out.println("Combined order history: ");
         System.out.println("=================================================================================================================");
-        System.out.printf("%-10s%-30s%-30s%-20s%-20s%-30s%n","Order ID", "Customer Name","Restaurant Name", "Order Price", "Order Type", "Assigned Rider" );
+        System.out.printf("%-10s%-30s%-30s%-20s%-20s%n","Order ID", "Customer Name","Restaurant Name", "Order Price", "Order Type");
         // System.out.println("Order ID        Customer Name       Restaurant Name        Order Price        Order Type        Assigned Rider");
         System.out.println("_________________________________________________________________________________________________________________\n");
         for (Order o : a.getPastOrders()){
-            System.out.printf("%-10d%-30s%-30s%-20f%-20s%-30s%n",o.getID(), o.getCusUsername(),o.getResName(), o.getOrderPrice(), o.getOrderType(),  o.getAssignedRider());
+            System.out.printf("%-10d%-30s%-30s%-20f%-20s%n",o.getID(), o.getCusUsername(),o.getResName(), o.getOrderPrice(), o.getOrderType());
             // System.out.println(o.getID() + "        " + o.getCusUsername() + "        " + o.getResName()+ "        " + o.getOrderPrice() + "        " + o.getOrderType() + "        " + o.getAssignedRider());
         }
         System.out.println("Enter anything to go back to previous menu");
